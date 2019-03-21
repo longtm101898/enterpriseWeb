@@ -1,0 +1,10 @@
+#wrapper {
+    font-family: sans-serif;
+    height: 100vh;
+  }
+  
+  #content-wrapper {
+    text-align: center;
+    overflow: auto;
+  }
+  
