@@ -4,9 +4,9 @@ const FormField = ({ formdata, change, id }) => {
   const showError = () => {
     let errorMessage = null;
 
-    if (formdata.validation && !formdata.valid) {
+    if ((formdata.validation.length && !formdata.valid) || formdata.validationMessage) {
       errorMessage = (
-        <div className="error_label">{formdata.validationMessage}</div>
+        <div className="alert alert-danger" role="alert">{formdata.validationMessage}</div>
       );
     }
     return errorMessage;

@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-// import { connect } from "react-redux";
-// import { withRouter, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { withRouter, Redirect } from "react-router-dom";
 import FormField from "../utils/Form/formField";
 import { update, generateData, isFormValid } from "../utils/Form/formAction";
+import { loginUser } from "../../actions/user_actions";
 
 class Login extends Component {
   state = {
@@ -58,8 +59,7 @@ class Login extends Component {
     let formIsValid = isFormValid(this.state.formData, "login");
 
     if (formIsValid) {
-    //   this.props.onSubmitForm(dataToSubmit);
-    console.log(dataToSubmit)
+      this.props.onSubmitForm(dataToSubmit);
     } else {
       this.setState({
         formError: true
@@ -68,7 +68,7 @@ class Login extends Component {
     
   };
   render() {
-      
+      console.log("auth" + this.props.isAuth)
     // let authRedirect = null;
     return (
       <div className="row">
@@ -106,4 +106,16 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+  return {
+      isAuth: state.user
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+      onSubmitForm: (dataToSubmit) => dispatch(loginUser(dataToSubmit))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));
