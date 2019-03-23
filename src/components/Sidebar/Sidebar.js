@@ -1,7 +1,5 @@
 import React from "react";
 import SideNav, {
-  Toggle,
-  Nav,
   NavItem,
   NavIcon,
   NavText
