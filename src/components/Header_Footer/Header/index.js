@@ -11,6 +11,7 @@ class Header extends Component {
               <a
                 className="nav-link dropdown-toggle"
                 id="searchDropdown"
+                href="#"
                 role="button"
                 data-toggle="dropdown"
                 aria-haspopup="true"
@@ -44,6 +45,7 @@ class Header extends Component {
             {/* Nav Item - Alerts */}
             <li className="nav-item dropdown no-arrow mx-1">
               <a
+                href="#"
                 className="nav-link dropdown-toggle"
                 id="alertsDropdown"
                 role="button"
@@ -104,7 +106,7 @@ class Header extends Component {
                     <img
                       className="rounded-circle"
                       src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                      alt
+                      alt=""
                     />
                     <div className="status-indicator bg-success" />
                   </div>

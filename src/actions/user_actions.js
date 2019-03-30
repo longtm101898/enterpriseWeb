@@ -14,6 +14,7 @@ export const loginUser = (dataSubmit) => async dispatch => {
 
 export const loginUserSuccess = (data) => {
     console.log(data);
+    localStorage.setItem("tokenKey", data.token)
     return {
         type: LOGIN_USER_SUCCESS,
         payload: data
