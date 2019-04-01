@@ -1,23 +1,17 @@
 import React, { Component } from "react";
-import Table from "../utils/table/table";
-import { paginate } from "../utils/paginate";
 import { connect } from "react-redux";
-import { getRoleData } from "../../actions/role_actions";
+import { paginate } from "../utils/paginate";
+import Table from "../utils/table/table";
+import { getFacultiesData } from "../../actions/faculties_actions";
 import ModalAddUpdate from "./modalAddUpdate";
-import { getCurrentUser } from "../../services/authService";
 
-class ManageRole extends Component {
-  constructor() {
-    super();
-    var user = getCurrentUser();
-    console.log(user);
-  }
+class ManageFaculties extends Component {
   state = {
     pageSize: 4,
     currentPage: 1,
     searchQuery: "",
     modalShow: false,
-    modalRole: ""
+    modalFaculties: ""
   };
 
   columns = [
@@ -31,16 +25,16 @@ class ManageRole extends Component {
     },
     {
       key: "update",
-      content: role => (
+      content: fac => (
         <React.Fragment>
           <button
-            onClick={() => this.showUpdateForm(role)}
+            onClick={() => this.showUpdateForm(fac)}
             className="btn btn-primary btn-sm"
           >
             <i className="fa fa-pen" />
           </button>
           <button
-            onClick={() => this.handleDelete(role)}
+            onClick={() => this.handleDelete(fac)}
             className="btn btn-danger btn-sm"
           >
             <i className="fa fa-trash" />
@@ -49,62 +43,61 @@ class ManageRole extends Component {
       )
     }
   ];
-  handleDelete = role => {
-    alert(role.id);
+  handleDelete = fac => {
+    alert(fac.id);
   };
 
-  handleSubmit = (role, roleId) => {
-    console.log(role)
-    console.log(roleId)
+  handleSubmit = (facSubmit, facId) => {
+    console.log(facSubmit)
+    console.log(facId)
   }
 
-  showUpdateForm(role) {
+  showUpdateForm(fac) {
     this.setState({
       modalShow: !this.state.modalShow,
-      modalRole: role
+      modalFaculties: fac
     });
   }
 
   componentDidMount = async () => {
-    await this.props.dispatch(getRoleData());
-    this.setState({ roles: this.props.roles });
+    await this.props.dispatch(getFacultiesData());
+    this.setState({ faculties: this.props.faculties });
   };
 
   toggle = () => {
     this.setState({
       modalShow: !this.state.modalShow,
-      modalRole: ""
+      modalFaculties: ""
     });
   };
+
   getData = () => {
     const { pageSize, currentPage, searchQuery } = this.state;
     const dataPagination = paginate(
-      this.props.roles.data,
+      this.props.faculties.data,
       currentPage,
       pageSize
     );
     return { data: dataPagination };
   };
+
   render() {
     const {
       pageSize,
       currentPage,
       searchQuery,
-      modalRole,
+      modalFaculties,
       modalShow
     } = this.state;
     const { data: dataPagination } = this.getData();
-    if (this.props.roles === null) {
-      return <h1>Loading...</h1>;
-    }
     return (
       <div style={{ marginLeft: "100px", marginRight: "50px" }}>
-        <h1 className="h3 mb-2 text-gray-800">Manage Roles</h1>
-        <button onClick={this.toggle}>Add new role</button>
+        <h1 className="h3 mb-2 text-gray-800">Manage Faculties</h1>
+        <button onClick={this.toggle}>Add new faculties</button>
         <ModalAddUpdate
           show={modalShow}
           toggle={this.toggle}
-          roleInfo={modalRole}
+          facultiesInfo={modalFaculties}
           onSubmit={this.handleSubmit}
         />
         <Table data={dataPagination} columns={this.columns} />
@@ -112,11 +105,7 @@ class ManageRole extends Component {
     );
   }
 }
-
 const mapStateToProps = state => {
-  return {
-    roles: state.role
-  };
+  return { faculties: state.faculties };
 };
-
-export default connect(mapStateToProps)(ManageRole);
+export default connect(mapStateToProps)(ManageFaculties);

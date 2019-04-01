@@ -6,3 +6,6 @@ export const AUTH_USER_FAIL = 'AUTH_USER_FAIL';
 //Roles
 export const GET_ROLE_DATA = "GET_ROLE_DATA";
 export const GET_ROLE_DATA_SUCCESS = "GET_ROLE_DATA_SUCCESS";
+
+//Faculties
+export const GET_FACULTIES_DATA = "GET_FACULTIES_DATA";

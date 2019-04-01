@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import FormField from "../utils/Form/formField";
 import {
@@ -10,13 +9,12 @@ import {
   populateFields
 } from "../utils/Form/formAction";
 
-class ModalAdd extends Component {
+class ModalAddUpdate extends Component {
   state = {
     modal: false,
     formError: false,
     formSuccess: "",
     formData: {
-      
       name: {
         element: "input",
         value: "",
@@ -24,7 +22,7 @@ class ModalAdd extends Component {
           className: "form-control form-control-user",
           name: "name_input",
           type: "name",
-          placeholder: "Enter role name"
+          placeholder: "Enter faculties name"
         },
         validation: {
           required: true
@@ -40,7 +38,7 @@ class ModalAdd extends Component {
           className: "form-control form-control-user",
           name: "description_input",
           type: "description",
-          placeholder: "Enter role description"
+          placeholder: "Enter faculties description"
         },
         validation: {},
         valid: false,
@@ -50,14 +48,12 @@ class ModalAdd extends Component {
     }
   };
   componentWillReceiveProps(nextProps) {
-    if (nextProps.roleInfo !== "") {
-      var roleForm = populateFields(this.state.formData, nextProps.roleInfo);
-      this.setState({ formData: roleForm, roleId: nextProps.roleInfo.id });
+    if (nextProps.facultiesInfo !== "") {
+      var facForm = populateFields(this.state.formData, nextProps.facultiesInfo);
+      this.setState({ formData: facForm, facId: nextProps.facultiesInfo.id });
     } else {
-      var roleRest = resetFields(this.state.formData);
-      this.setState({ formData: roleRest, roleId: "" });
-      // var roleReset = populateFields(this.state.formData, nextProps.roleInfo);
-      // this.setState({ formData: roleForm });
+      var facRs = resetFields(this.state.formData);
+      this.setState({ formData: facRs, facId: 0 });
     }
   }
 
@@ -77,27 +73,30 @@ class ModalAdd extends Component {
 
   submitForm = e => {
     e.preventDefault();
-    let dataToSubmit = generateData(this.state.formData, "role");
-    let formIsValid = isFormValid(this.state.formData, "role");
+    let dataToSubmit = generateData(this.state.formData, "fac");
+    let formIsValid = isFormValid(this.state.formData, "fac");
     if (formIsValid) {
-      console.log(dataToSubmit);
-      if(this.state.roleId !== ""){
-        console.log("update")
+      if (this.state.roleId !== 0) {
+        console.log("update");
+        this.props.onSubmit(dataToSubmit, this.state.facId)
+      }else{
+        this.props.onSubmit(dataToSubmit)
       }
       // this.props.onSubmitForm(dataToSubmit);
+      this.props.toggle();
     } else {
       this.setState({
         formError: true
       });
     }
-    this.props.toggle();
+  
   };
 
   render() {
     return (
       <div>
         <Modal isOpen={this.props.show} toggle={this.props.toggle}>
-          <ModalHeader>Role add</ModalHeader>
+          <ModalHeader>Faculties add & update</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
               <FormField
@@ -126,8 +125,4 @@ class ModalAdd extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return { roles: state.role };
-};
-
-export default connect(mapStateToProps)(ModalAdd);
+export default ModalAddUpdate;
