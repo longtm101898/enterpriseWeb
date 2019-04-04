@@ -1,26 +1,53 @@
 import React from "react";
+import cwApi from "../../axios-ew";
 import SideNav, {
   NavItem,
   NavIcon,
-  NavText
+  NavText,
+  Nav,
+  Toggle
 } from "@trendmicro/react-sidenav";
 
 // Be sure to include styles at some point, probably during your bootstraping
 import "@trendmicro/react-sidenav/dist/react-sidenav.css";
+import { getCurrentUser } from "../../services/authService";
+import SidebarNav from "./SidebarNav";
 
 class Sidebar extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  state = { functions: [] };
   showSettings(event) {
     event.preventDefault();
   }
+  componentWillMount = async () => {
+    var { Id: userId } = getCurrentUser();
+    let functions = [];
+    await cwApi.get("permission/" + userId + "/functions-view").then(
+      res =>
+        (functions = res.data.sort((n1, n2) => {
+          if (n1.SortOrder > n2.SortOrder) return 1;
+          else if (n1.SortOrder < n2.SortOrder) return -1;
+          return 0;
+        }))
+    );
+    this.setState({
+      functions
+    });
+  };
 
   render() {
+    const { functions } = this.state;
+
     return (
       <SideNav
         onSelect={selected => {
           // Add your code here
+          console.log(selected);
         }}
       >
-        <SideNav.Toggle />
+        <Toggle />
         <SideNav.Nav defaultSelected="home">
           <NavItem eventKey="home">
             <NavIcon>
@@ -28,21 +55,33 @@ class Sidebar extends React.Component {
             </NavIcon>
             <NavText>Home</NavText>
           </NavItem>
-          <NavItem eventKey="charts">
-            <NavIcon>
-              <i
-                className="fa fa-fw fa-line-chart"
-                style={{ fontSize: "1.75em" }}
-              />
+          {/* <NavItem eventKey="demo"> */}
+          {/* <NavIcon>
+              <i className="fa fa-fw fa-user" style={{ fontSize: "1.75em" }} />
             </NavIcon>
-            <NavText>Charts</NavText>
-            <NavItem eventKey="charts/linechart">
-              <NavText>Line Chart</NavText>
-            </NavItem>
-            <NavItem eventKey="charts/barchart">
-              <NavText>Bar Chart</NavText>
-            </NavItem>
-          </NavItem>
+            <NavText>System</NavText> */}
+          {functions.map((item, i) => {
+            if (!item.parentId) {
+              return (
+                <NavItem eventKey={item.url}>
+                  <NavIcon>
+                    <i
+                      className="fa fa-fw fa-user"
+                      style={{ fontSize: "1.75em" }}
+                    />
+                  </NavIcon>
+                  <NavText>{item.name}</NavText>
+                  {item.childFunctions &&
+                    item.childFunctions.map((item, i) => (
+                      <NavItem key={item.id} eventKey={item.url}>
+                        <NavText>{item.name}</NavText>
+                      </NavItem>
+                    ))}
+                </NavItem>
+              );
+            }
+          })}
+          {/* </NavItem> */}
         </SideNav.Nav>
       </SideNav>
     );
