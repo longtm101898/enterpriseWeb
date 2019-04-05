@@ -1,17 +1,14 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import cwApi from "../../axios-ew";
 import SideNav, {
   NavItem,
   NavIcon,
   NavText,
-  Nav,
   Toggle
 } from "@trendmicro/react-sidenav";
-
-// Be sure to include styles at some point, probably during your bootstraping
 import "@trendmicro/react-sidenav/dist/react-sidenav.css";
 import { getCurrentUser } from "../../services/authService";
-import SidebarNav from "./SidebarNav";
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -21,20 +18,25 @@ class Sidebar extends React.Component {
   showSettings(event) {
     event.preventDefault();
   }
-  componentWillMount = async () => {
-    var { Id: userId } = getCurrentUser();
-    let functions = [];
-    await cwApi.get("permission/" + userId + "/functions-view").then(
-      res =>
-        (functions = res.data.sort((n1, n2) => {
-          if (n1.SortOrder > n2.SortOrder) return 1;
-          else if (n1.SortOrder < n2.SortOrder) return -1;
-          return 0;
-        }))
-    );
-    this.setState({
-      functions
-    });
+
+  componentDidMount = async () => {
+    if (localStorage.getItem("tokenKey") === null) {
+      this.props.history.push("/login");
+    } else {
+      var { Id: userId } = getCurrentUser();
+      let functions = [];
+      await cwApi.get("permission/" + userId + "/functions-view").then(
+        res =>
+          (functions = res.data.sort((n1, n2) => {
+            if (n1.SortOrder > n2.SortOrder) return 1;
+            else if (n1.SortOrder < n2.SortOrder) return -1;
+            return 0;
+          }))
+      );
+      this.setState({
+        functions
+      });
+    }
   };
 
   render() {
@@ -63,7 +65,7 @@ class Sidebar extends React.Component {
           {functions.map((item, i) => {
             if (!item.parentId) {
               return (
-                <NavItem eventKey={item.url}>
+                <NavItem eventKey={item.url} key={item.id}>
                   <NavIcon>
                     <i
                       className="fa fa-fw fa-user"
@@ -87,4 +89,4 @@ class Sidebar extends React.Component {
     );
   }
 }
-export default Sidebar;
+export default withRouter(Sidebar);

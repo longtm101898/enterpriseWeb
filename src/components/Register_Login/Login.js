@@ -65,13 +65,19 @@ class Login extends Component {
         formError: true
       });
     }
-    
   };
   render() {
-      console.log("auth" + this.props.isAuth)
+    let authRedirect = null;
+
+    if (this.props.isAuth === true) {
+      console.log(this.props.isAuth);
+      authRedirect = <Redirect to="/role" />;
+    }
+    // console.log("auth" + this.props.isAuth)
     // let authRedirect = null;
     return (
       <div className="row">
+        {authRedirect}
         <div className="col-lg-6 d-none d-lg-block bg-login-image" />
         <div className="col-lg-6">
           <div className="p-5">
@@ -90,11 +96,11 @@ class Login extends Component {
               formdata={this.state.formData.password}
               change={element => this.updateForm(element)}
             />
-            <hr/>
-            <br/>
+            <hr />
+            <br />
             <button
               className="btn btn-primary btn-user btn-block"
-              style={{marginBottom: 100, marginTop: 50}}
+              style={{ marginBottom: 100, marginTop: 50 }}
               onClick={e => this.submitForm(e)}
             >
               Login
@@ -106,16 +112,19 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-      isAuth: state.user
-  }
-}
+    isAuth: state.user
+  };
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-      onSubmitForm: (dataToSubmit) => dispatch(loginUser(dataToSubmit))
-  }
-}
+    onSubmitForm: dataToSubmit => dispatch(loginUser(dataToSubmit))
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(Login));

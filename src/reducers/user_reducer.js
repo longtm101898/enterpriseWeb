@@ -1,4 +1,4 @@
-import { LOGIN_USER_SUCCESS, LOGIN_USER_FAIL } from "../actions/types";
+import { LOGIN_USER_SUCCESS, LOGIN_USER_FAIL, LOGOUT } from "../actions/types";
 
 const initialState = {
   isAuth: false,
@@ -19,6 +19,11 @@ export default function(state = initialState, action) {
         ...state,
         isAuth: false,
         error: action.error
+      };
+    case LOGOUT:
+      return {
+        ...state,
+        isAuth: false
       };
     default:
       return state;

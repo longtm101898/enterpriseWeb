@@ -1,48 +1,24 @@
 import React, { Component } from "react";
+import { getCurrentUser } from "../../../services/authService";
 
 class Header extends Component {
+  state = { user: [] };
+  componentDidMount() {
+    var user = getCurrentUser();
+    this.setState({ user });
+  }
+
+  handleLogout = () => {
+    this.props.logout();
+  };
+
   render() {
+    const { user } = this.state;
+
     return (
       <header>
         <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
           <ul className="navbar-nav ml-auto">
-            {/* Nav Item - Search Dropdown (Visible Only XS) */}
-            <li className="nav-item dropdown no-arrow d-sm-none">
-              <a
-                className="nav-link dropdown-toggle"
-                id="searchDropdown"
-                href="#"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <i className="fas fa-search fa-fw" />
-              </a>
-              {/* Dropdown - Messages */}
-              <div
-                className="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                aria-labelledby="searchDropdown"
-              >
-                <form className="form-inline mr-auto w-100 navbar-search">
-                  <div className="input-group">
-                    <input
-                      type="text"
-                      className="form-control bg-light border-0 small"
-                      placeholder="Search for..."
-                      aria-label="Search"
-                      aria-describedby="basic-addon2"
-                    />
-                    <div className="input-group-append">
-                      <button className="btn btn-primary" type="button">
-                        <i className="fas fa-search fa-sm" />
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </li>
-            {/* Nav Item - Alerts */}
             <li className="nav-item dropdown no-arrow mx-1">
               <a
                 href="#"
@@ -138,7 +114,7 @@ class Header extends Component {
                 aria-expanded="false"
               >
                 <span className="mr-2 d-none d-lg-inline text-gray-600 small">
-                  Valerie Luna
+                  {user ? user.fullName : "Loading..."}
                 </span>
                 <img
                   className="img-profile rounded-circle"
@@ -167,6 +143,7 @@ class Header extends Component {
                   className="dropdown-item"
                   data-toggle="modal"
                   data-target="#logoutModal"
+                  onClick={this.handleLogout}
                 >
                   <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" />
                   Logout

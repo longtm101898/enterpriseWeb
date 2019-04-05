@@ -1,12 +1,20 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 import Footer from "../components/Header_Footer/Footer";
 import Header from "../components/Header_Footer/Header";
 import SidebarLeft from "../components/Sidebar/Sidebar";
+import { logout } from "../actions/user_actions";
 import "./layout.css";
-export default class Layout extends Component {
+
+class Layout extends Component {
+  logout = () => {
+    this.props.history.push("/login");
+    this.props.dispatch(logout());
+  };
   render() {
     if (window.location.pathname === "/login") {
-      document.body.classList.add("bg-gradient-primary")
+      document.body.classList.add("bg-gradient-primary");
       return (
         <div className="container">
           <div className="row justify-content-center">
@@ -24,7 +32,7 @@ export default class Layout extends Component {
           <SidebarLeft />
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
-              <Header />
+              <Header logout={this.logout} />
               <div className="container-fluid">{this.props.children}</div>
             </div>
             <Footer />
@@ -34,3 +42,11 @@ export default class Layout extends Component {
     }
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    isAuth: state.user
+  };
+};
+
+export default connect(mapStateToProps)(withRouter(Layout));
