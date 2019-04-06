@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import cwApi from "../../axios-ew";
 import SideNav, {
   NavItem,
@@ -9,6 +9,7 @@ import SideNav, {
 } from "@trendmicro/react-sidenav";
 import "@trendmicro/react-sidenav/dist/react-sidenav.css";
 import { getCurrentUser } from "../../services/authService";
+import history from "../../history";
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -46,12 +47,14 @@ class Sidebar extends React.Component {
       <SideNav
         onSelect={selected => {
           // Add your code here
-          console.log(selected);
+          history.push(selected)
         }}
       >
         <Toggle />
         <SideNav.Nav defaultSelected="home">
+       
           <NavItem eventKey="home">
+          
             <NavIcon>
               <i className="fa fa-fw fa-home" style={{ fontSize: "1.75em" }} />
             </NavIcon>
@@ -76,7 +79,7 @@ class Sidebar extends React.Component {
                   {item.childFunctions &&
                     item.childFunctions.map((item, i) => (
                       <NavItem key={item.id} eventKey={item.url}>
-                        <NavText>{item.name}</NavText>
+                        <NavText><Link to={item.url}>{item.name}</Link></NavText>
                       </NavItem>
                     ))}
                 </NavItem>

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import history from "./history";
 
 const ewApi = axios.create({
   baseURL: "http://localhost:49763/api/",
@@ -18,6 +19,9 @@ ewApi.interceptors.response.use(null, error => {
 
   if (error.response.data) {
     toast.error(error.response.data);
+  }else if(error.response.status === 403){
+    localStorage.removeItem("tokenKey")
+    history.push("/login")
   }
 
   return Promise.reject(error);

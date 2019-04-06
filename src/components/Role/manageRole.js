@@ -94,9 +94,6 @@ class ManageRole extends Component {
       modalShow
     } = this.state;
     const { data: dataPagination } = this.getData();
-    if (this.props.roles === null) {
-      return <h1>Loading...</h1>;
-    }
     return (
       <div style={{ marginLeft: "100px", marginRight: "50px" }}>
         <h1 className="h3 mb-2 text-gray-800">Manage Roles</h1>

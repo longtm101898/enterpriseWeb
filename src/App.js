@@ -7,6 +7,7 @@ import ManageRole from "./components/Role/manageRole";
 import ManageFaculties from "./components/Faculties/manageFaculties";
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./components/dashboard";
+import ProtectedRoute from "./shared/protectedRoute";
 
 class App extends Component {
   render() {
@@ -15,7 +16,7 @@ class App extends Component {
         <ToastContainer />
         <Switch>
           <Route path="/" exact component={Dashboard} />
-          <Route path="/role" exact component={ManageRole} />
+          <ProtectedRoute path="/system/role" exact component={ManageRole} />
           <Route path="/login" exact component={Login} />
           <Route path="/faculties" exact component={ManageFaculties} />
         </Switch>
