@@ -11,6 +11,7 @@ import ManageTerm from "./components/Term/manageTerm";
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./components/dashboard";
 import ProtectedRoute from "./shared/protectedRoute";
+import ManageUser from "./components/User/manageUser";
 
 class App extends Component {
   render() {
@@ -25,6 +26,7 @@ class App extends Component {
           <Route path="/function" component={ManageFunction}/>
           <Route path="/contribution" exact component={ManageContribution} />
           <Route path="/term" exact component={ManageTerm}/>
+          <Route path="/system/user" exact component={ManageUser} />
         </Switch>
       </Layout>
     );
