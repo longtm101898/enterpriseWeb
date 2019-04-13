@@ -10,3 +10,13 @@ export const GET_ROLE_DATA_SUCCESS = "GET_ROLE_DATA_SUCCESS";
 
 //Faculties
 export const GET_FACULTIES_DATA = "GET_FACULTIES_DATA";
+
+
+//Function
+export const GET_FUNCTION_DATA = "GET_FUNCTION_DATA";
+
+//Contribution
+export const GET_CONTRIBUTION_DATA = "GET_CONTRIBUTION_DATA";
+
+//Term
+export const GET_TERM_DATA = "GET_TERM_DATA";

@@ -2,16 +2,16 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { paginate } from "../utils/paginate";
 import Table from "../utils/table/table";
-import { getFacultiesData } from "../../actions/faculties_actions";
+import {getFunctionData} from "../../actions/function_actions";
 import ModalAddUpdate from "./modalAddUpdate";
 
-class ManageFaculties extends Component {
+class ManageFunction extends Component {
   state = {
     pageSize: 4,
     currentPage: 1,
     searchQuery: "",
     modalShow: false,
-    modalFaculties: ""
+    modalFunction: ""
   };
 
   columns = [
@@ -20,21 +20,37 @@ class ManageFaculties extends Component {
       label: "Name"
     },
     {
-      path: "description",
-      label: "Description"
+      path: "url",
+      label: "URL"
+    },
+    {
+      path: "parentId",
+      label: "Parent ID"
+    },
+    {
+      path: "iconCss",
+      label: "Icon Css"
+    },
+    {
+      path: "sortOrder",
+      label: "Sort Order"
+    },
+    {
+      path: "status",
+      label: "Status"
     },
     {
       key: "update",
-      content: fac => (
+      content: fun => (
         <React.Fragment>
           <button
-            onClick={() => this.showUpdateForm(fac)}
+            onClick={() => this.showUpdateForm(fun)}
             className="btn btn-primary btn-sm"
           >
             <i className="fa fa-pen" />
           </button>
           <button
-            onClick={() => this.handleDelete(fac)}
+            onClick={() => this.handleDelete(fun)}
             className="btn btn-danger btn-sm"
           >
             <i className="fa fa-trash" />
@@ -43,38 +59,40 @@ class ManageFaculties extends Component {
       )
     }
   ];
-  handleDelete = fac => {
-    alert(fac.id);
+
+  handleDelete = fun => {
+    alert(fun.id);
   };
 
-  handleSubmit = (facSubmit, facId) => {
-    console.log(facSubmit)
-    console.log(facId)
+  handleSubmit = (funSubmit, funId) => {
+    console.log(funSubmit)
+    console.log(funId)
   }
 
-  showUpdateForm(fac) {
+  showUpdateForm(fun) {
     this.setState({
       modalShow: !this.state.modalShow,
-      modalFaculties: fac
+      modalFunction: fun
     });
   }
 
   componentDidMount = async () => {
-    await this.props.dispatch(getFacultiesData());
-    this.setState({ faculties: this.props.faculties });
+    await this.props.dispatch(getFunctionData());
+    console.log(this.props.function);
+    this.setState({ function: this.props.function });
   };
 
   toggle = () => {
     this.setState({
       modalShow: !this.state.modalShow,
-      modalFaculties: ""
+      modalFunction: ""
     });
   };
 
   getData = () => {
     const { pageSize, currentPage, searchQuery } = this.state;
     const dataPagination = paginate(
-      this.props.faculties.data,
+      this.props.function.data,
       currentPage,
       pageSize
     );
@@ -86,18 +104,18 @@ class ManageFaculties extends Component {
       pageSize,
       currentPage,
       searchQuery,
-      modalFaculties,
+      modalFunction,
       modalShow
     } = this.state;
     const { data: dataPagination } = this.getData();
     return (
       <div style={{ marginLeft: "100px", marginRight: "50px" }}>
-        <h1 className="h3 mb-2 text-gray-800">Manage Faculties</h1>
-        <button onClick={this.toggle}>Add new faculties</button>
+        <h1 className="h3 mb-2 text-gray-800">Manage Function</h1>
+        <button onClick={this.toggle}>Add new function</button>
         <ModalAddUpdate
           show={modalShow}
           toggle={this.toggle}
-          facultiesInfo={modalFaculties}
+          functionInfo={modalFunction}
           onSubmit={this.handleSubmit}
         />
         
@@ -106,7 +124,9 @@ class ManageFaculties extends Component {
     );
   }
 }
+  
 const mapStateToProps = state => {
-  return { faculties: state.faculties };
+return { function: state.functions };
 };
-export default connect(mapStateToProps)(ManageFaculties);
+export default connect(mapStateToProps)(ManageFunction);
+  

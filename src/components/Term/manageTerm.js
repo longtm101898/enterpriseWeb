@@ -2,16 +2,17 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { paginate } from "../utils/paginate";
 import Table from "../utils/table/table";
-import { getFacultiesData } from "../../actions/faculties_actions";
+import { getTermData } from "../../actions/term_actions";
 import ModalAddUpdate from "./modalAddUpdate";
+import Pagination from "../utils/pagination";
 
-class ManageFaculties extends Component {
+class ManageTerm extends Component {
   state = {
     pageSize: 4,
     currentPage: 1,
     searchQuery: "",
     modalShow: false,
-    modalFaculties: ""
+    modalTerm: ""
   };
 
   columns = [
@@ -20,21 +21,25 @@ class ManageFaculties extends Component {
       label: "Name"
     },
     {
-      path: "description",
-      label: "Description"
+      path: "dateStarted",
+      label: "Date Started"
+    },
+    {
+      path: "closingDate",
+      label: "Closing Date"
     },
     {
       key: "update",
-      content: fac => (
+      content: term => (
         <React.Fragment>
           <button
-            onClick={() => this.showUpdateForm(fac)}
+            onClick={() => this.showUpdateForm(term)}
             className="btn btn-primary btn-sm"
           >
             <i className="fa fa-pen" />
           </button>
           <button
-            onClick={() => this.handleDelete(fac)}
+            onClick={() => this.handleDelete(term)}
             className="btn btn-danger btn-sm"
           >
             <i className="fa fa-trash" />
@@ -43,70 +48,83 @@ class ManageFaculties extends Component {
       )
     }
   ];
-  handleDelete = fac => {
-    alert(fac.id);
+  handleDelete = term => {
+    alert(term.id);
   };
 
-  handleSubmit = (facSubmit, facId) => {
-    console.log(facSubmit)
-    console.log(facId)
+  handleSubmit = (termSubmit, termId) => {
+    console.log(termSubmit)
+    console.log(termId)
   }
 
-  showUpdateForm(fac) {
+  showUpdateForm(ter) {
     this.setState({
       modalShow: !this.state.modalShow,
-      modalFaculties: fac
+      modalTerm: ter
     });
   }
 
   componentDidMount = async () => {
-    await this.props.dispatch(getFacultiesData());
-    this.setState({ faculties: this.props.faculties });
+    await this.props.dispatch(getTermData());
+    this.setState({ term: this.props.term });
   };
 
   toggle = () => {
     this.setState({
       modalShow: !this.state.modalShow,
-      modalFaculties: ""
+      modalTerm: ""
     });
   };
 
   getData = () => {
     const { pageSize, currentPage, searchQuery } = this.state;
     const dataPagination = paginate(
-      this.props.faculties.data,
+      this.props.term.data,
       currentPage,
       pageSize
     );
-    return { data: dataPagination };
+    console.log(this.state);
+    return { data: dataPagination};
   };
+  
+  handlePageChange = page =>{
+    this.setState({
+      currentPage: page
+    })
+  }
 
   render() {
     const {
       pageSize,
       currentPage,
       searchQuery,
-      modalFaculties,
+      modalTerm,
       modalShow
-    } = this.state;
+    } = this.state;  
+    const itemsCount = this.props.term.data.length;
     const { data: dataPagination } = this.getData();
     return (
       <div style={{ marginLeft: "100px", marginRight: "50px" }}>
-        <h1 className="h3 mb-2 text-gray-800">Manage Faculties</h1>
-        <button onClick={this.toggle}>Add new faculties</button>
+        <h1 className="h3 mb-2 text-gray-800">Manage Term</h1>
+        <button onClick={this.toggle}>Add new Term</button>
         <ModalAddUpdate
           show={modalShow}
           toggle={this.toggle}
-          facultiesInfo={modalFaculties}
+          termInfo={modalTerm}
           onSubmit={this.handleSubmit}
         />
-        
         <Table data={dataPagination} columns={this.columns} />
+       <Pagination
+       itemsCount={itemsCount}
+       pageSize={pageSize}
+       currentPage={currentPage}
+       onPageChange={this.handlePageChange}
+       />
       </div>
     );
   }
 }
 const mapStateToProps = state => {
-  return { faculties: state.faculties };
+  return { term: state.term };
 };
-export default connect(mapStateToProps)(ManageFaculties);
+export default connect(mapStateToProps)(ManageTerm);
