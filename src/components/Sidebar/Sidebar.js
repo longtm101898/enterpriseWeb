@@ -12,9 +12,6 @@ import { getCurrentUser } from "../../services/authService";
 import history from "../../history";
 
 class Sidebar extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   state = { functions: [] };
   showSettings(event) {
     event.preventDefault();
@@ -46,15 +43,15 @@ class Sidebar extends React.Component {
     return (
       <SideNav
         onSelect={selected => {
-          // Add your code here
-          history.push(selected)
+          const to = "/" + selected;
+          if (window.location.pathname !== to) {
+            history.push(to);
+          }
         }}
       >
         <Toggle />
         <SideNav.Nav defaultSelected="home">
-       
           <NavItem eventKey="home">
-          
             <NavIcon>
               <i className="fa fa-fw fa-home" style={{ fontSize: "1.75em" }} />
             </NavIcon>
@@ -79,7 +76,9 @@ class Sidebar extends React.Component {
                   {item.childFunctions &&
                     item.childFunctions.map((item, i) => (
                       <NavItem key={item.id} eventKey={item.url}>
-                        <NavText><Link to={item.url}>{item.name}</Link></NavText>
+                        <NavText>
+                          <Link to={item.url}>{item.name}</Link>
+                        </NavText>
                       </NavItem>
                     ))}
                 </NavItem>

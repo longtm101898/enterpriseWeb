@@ -1,11 +1,11 @@
-import axios from "axios";
 import { LOGIN_USER_SUCCESS, LOGIN_USER_FAIL, LOGOUT } from "./types";
 import history from "../history";
+import ewApi from "../axios-ew";
 
 export const loginUser = dataSubmit => async dispatch => {
-  const baseURL = "http://localhost:49763/api/";
-  await axios
-    .post(baseURL + "account/login", dataSubmit)
+
+  await ewApi
+    .post("account/login", dataSubmit)
     .then(res => dispatch(loginUserSuccess(res.data)))
     .catch(err => dispatch(loginUserFail(err)));
 };

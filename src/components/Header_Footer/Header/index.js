@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { getCurrentUser } from "../../../services/authService";
 
 class Header extends Component {
@@ -126,10 +127,10 @@ class Header extends Component {
                 className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                 aria-labelledby="userDropdown"
               >
-                <a className="dropdown-item">
+                <Link className="dropdown-item" to="/user/profile">
                   <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400" />
                   Profile
-                </a>
+                </Link>
                 <a className="dropdown-item">
                   <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400" />
                   Settings
