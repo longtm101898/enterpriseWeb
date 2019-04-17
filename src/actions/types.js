@@ -3,7 +3,8 @@ export const LOGIN_USER_FAIL = "LOGIN_USER_FAIL";
 export const LOGOUT = "LOGOUT";
 export const AUTH_USER_SUCCESS = 'AUTH_USER_SUCCESS';
 export const AUTH_USER_FAIL = 'AUTH_USER_FAIL';
-
+export const GET_USER_DATA = "GET_USER_DATA";
+export const GET_USER_DATA_BY_ID = "GET_USER_DATA_BY_ID";
 //Roles
 export const GET_ROLE_DATA = "GET_ROLE_DATA";
 export const GET_ROLE_DATA_SUCCESS = "GET_ROLE_DATA_SUCCESS";

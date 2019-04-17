@@ -1,12 +1,19 @@
-import { LOGIN_USER_SUCCESS, LOGIN_USER_FAIL, LOGOUT } from "../actions/types";
+import {
+  LOGIN_USER_SUCCESS,
+  LOGIN_USER_FAIL,
+  LOGOUT,
+  GET_USER_DATA,
+  GET_USER_DATA_BY_ID
+} from "../actions/types";
 
 const initialState = {
   isAuth: false,
   error: null,
-  token: null
+  token: null,
+  data: []
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case LOGIN_USER_SUCCESS:
       return {
@@ -24,6 +31,16 @@ export default function(state = initialState, action) {
       return {
         ...state,
         isAuth: false
+      };
+    case GET_USER_DATA:
+      return {
+        ...state,
+        data: action.payload
+      };
+    case GET_USER_DATA_BY_ID:
+      return {
+        ...state,
+        data: action.payload
       };
     default:
       return state;

@@ -1,4 +1,4 @@
-import { LOGIN_USER_SUCCESS, LOGIN_USER_FAIL, LOGOUT } from "./types";
+import { LOGIN_USER_SUCCESS, LOGIN_USER_FAIL, LOGOUT, GET_USER_DATA, GET_USER_DATA_BY_ID} from "./types";
 import history from "../history";
 import ewApi from "../axios-ew";
 
@@ -34,4 +34,15 @@ export const logout = () => {
     type: LOGOUT,
     payload: null
   };
+};
+
+export const getUserData = () => async dispatch => {
+  await ewApi
+    .get("user")
+    .then(res => dispatch({ type: GET_USER_DATA, payload: res.data }));
+};
+export const getUserDataById = (id) => async dispatch => {
+  await ewApi
+    .get("user/" + id)
+    .then(res => dispatch({ type: GET_USER_DATA_BY_ID, payload: res.data }));
 };
