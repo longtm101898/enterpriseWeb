@@ -67,9 +67,11 @@ class ManageContribution extends Component {
     alert(con.id);
   };
 
-  handleSubmit = (conSubmit, conId) => {
+  handleSubmit = (conSubmit, conId, img, word) => {
     console.log(conSubmit)
     console.log(conId)
+    console.log(img)
+    console.log(word)
   }
 
   showUpdateForm(con) {
