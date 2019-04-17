@@ -24,14 +24,9 @@ class App extends Component {
           <Route path="/login" exact component={Login} />
           <Route path="/faculties" exact component={ManageFaculties} />
           <Route path="/function" component={ManageFunction}/>
-<<<<<<< HEAD
-          <Route path="/contribution/view" exact component={ManageContribution} />
-          <Route path="/system/term" exact component={ManageTerm}/>
-=======
           <Route path="/contribution" exact component={ManageContribution} />
           <Route path="/term" exact component={ManageTerm}/>
           <Route path="/system/user" exact component={ManageUser} />
->>>>>>> 1192e05a4e96d1c8a79dbb4f2c3a21f51621a9ee
         </Switch>
       </Layout>
     );
