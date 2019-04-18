@@ -4,14 +4,9 @@ import { paginate } from "../utils/paginate";
 import { connect } from "react-redux";
 import { getRoleData } from "../../actions/role_actions";
 import ModalAddUpdate from "./modalAddUpdate";
-import { getCurrentUser } from "../../services/authService";
+import { getCurrentUser, hasPermission } from "../../services/authService";
 
 class ManageRole extends Component {
-  constructor() {
-    super();
-    var user = getCurrentUser();
-    console.log(user);
-  }
   state = {
     pageSize: 4,
     currentPage: 1,
@@ -33,18 +28,22 @@ class ManageRole extends Component {
       key: "update",
       content: role => (
         <React.Fragment>
-          <button
+          {hasPermission("SYSTEM.ROLE_UPDATE", "update") && (
+            <button
             onClick={() => this.showUpdateForm(role)}
             className="btn btn-primary btn-sm"
           >
             <i className="fa fa-pen" />
           </button>
-          <button
+          )}
+          {hasPermission("SYSTEM.ROLE_DELETE", "delete") && (
+            <button
             onClick={() => this.handleDelete(role)}
             className="btn btn-danger btn-sm"
           >
             <i className="fa fa-trash" />
           </button>
+          )}
         </React.Fragment>
       )
     }

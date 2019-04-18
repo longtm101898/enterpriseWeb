@@ -64,11 +64,12 @@ class Sidebar extends React.Component {
             <NavText>System</NavText> */}
           {functions.map((item, i) => {
             if (!item.parentId) {
+              console.log(item)
               return (
                 <NavItem eventKey={item.url} key={item.id}>
                   <NavIcon>
                     <i
-                      className="fa fa-fw fa-user"
+                      className={item.iconCss}
                       style={{ fontSize: "1.75em" }}
                     />
                   </NavIcon>
