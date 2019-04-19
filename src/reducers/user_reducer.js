@@ -10,7 +10,8 @@ const initialState = {
   isAuth: false,
   error: null,
   token: null,
-  data: []
+  data: [],
+  dataById: null
 };
 
 export default function (state = initialState, action) {
@@ -40,7 +41,7 @@ export default function (state = initialState, action) {
     case GET_USER_DATA_BY_ID:
       return {
         ...state,
-        data: action.payload
+        dataById: action.payload
       };
     default:
       return state;

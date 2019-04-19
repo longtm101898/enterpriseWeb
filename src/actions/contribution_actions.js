@@ -1,9 +1,24 @@
 import ewApi from '../axios-ew';
 import {GET_CONTRIBUTION_DATA} from './types';
 
-export const getContributionData = () => async dispatch =>{
+export const getContributionData = (userId,role) => async dispatch =>{
     await ewApi
-    .get("contribution")
+    .get("contribution/pagingfaculties?userId="+userId+"&role="+role)
     .then(res => dispatch({type: GET_CONTRIBUTION_DATA, payload: res.data}))
-}
+};
+
+export const postContribution = (conSubmit, conId, img, word,userId,termId) => async dispatch =>{
+    await ewApi
+    .post("contribution?conId="+conId+"&wordUrl="+word+"&imageUrl="+img+"&userId="+userId+"&termId="+termId,conSubmit 
+    )
+    .then(res => console.log(res)).catch(err=> console.log(err))
+    
+};
+
+export const deleteContribution = (conId)=> async dispatch =>{
+    await ewApi
+    .delete("contribution/"+conId)
+    .then(res => console.log(res))
+};
+
 

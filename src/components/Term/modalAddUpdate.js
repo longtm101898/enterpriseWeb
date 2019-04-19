@@ -80,7 +80,7 @@ class ModelAddUpdate extends Component {
             console.log("update");
             this.props.onSubmit(dataToSubmit, this.state.termId)
           }else{
-            this.props.onSubmit(dataToSubmit)
+            this.props.onSubmit(dataToSubmit,0)
           }
           // this.props.onSubmitForm(dataToSubmit);
           this.props.toggle();

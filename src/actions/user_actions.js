@@ -38,7 +38,11 @@ export const logout = () => {
 
 export const getUserData = () => async dispatch => {
   await ewApi
-    .get("user")
+    .get("user", {
+      headers: {
+        Authorization: "Bearer ".concat(localStorage.getItem("tokenKey"))
+      }
+    })
     .then(res => dispatch({ type: GET_USER_DATA, payload: res.data }));
 };
 export const getUserDataById = (id) => async dispatch => {
@@ -46,3 +50,15 @@ export const getUserDataById = (id) => async dispatch => {
     .get("user/" + id)
     .then(res => dispatch({ type: GET_USER_DATA_BY_ID, payload: res.data }));
 };
+
+export const postUser = (userSubmit,userId) => async dispatch =>{
+  await ewApi
+    .post("user?userId="+userId,userSubmit)
+    .then(res => console.log(res));
+}
+
+export const deleteUser = (userId) => async dispatch =>{
+  await ewApi
+  .delete("user/"+userId)
+  .then(res => console.log(res));
+}

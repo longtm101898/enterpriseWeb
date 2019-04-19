@@ -22,10 +22,10 @@ class App extends Component {
           <Route path="/" exact component={Dashboard} />
           <ProtectedRoute path="/system/role" exact component={ManageRole} />
           <Route path="/login" exact component={Login} />
-          <Route path="/faculties" exact component={ManageFaculties} />
+          <Route path="/faculties/view" exact component={ManageFaculties} />
           <Route path="/function" component={ManageFunction}/>
-          <Route path="/contribution" exact component={ManageContribution} />
-          <Route path="/term" exact component={ManageTerm}/>
+          <Route path="/contribution/view" exact component={ManageContribution} />
+          <Route path="/term/view" exact component={ManageTerm}/>
           <Route path="/system/user" exact component={ManageUser} />
         </Switch>
       </Layout>

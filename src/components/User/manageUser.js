@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import { paginate } from '../utils/paginate';
 import Pagination from '../utils/pagination';
 import Table from "../utils/table/table";
-import { getUserData,getUserDataById } from "../../actions/user_actions";
+import { getUserData,getUserDataById, postUser, deleteUser } from "../../actions/user_actions";
 import ModalAddUpdate from './modalAddUpdate';
 class ManageUser extends Component {
     state = {
-        pageSize: 1,
+        pageSize: 4,
         currentPage: 1,
         searchQuery: "",
         modalShow: false,
@@ -46,30 +46,40 @@ class ManageUser extends Component {
                 >
                     <i className="fa fa-trash" />
                 </button>
-                {/* <button
-                    onClick={() => this.handleInfor()}>
-                    
-                </button> */}
+                <button
+                    onClick={() => this.handleInfor(fac)}
+                    className="btn btn-info btn-sm">
+                    <i className="fa fa-info" />
+                </button>
                 </React.Fragment>
             )
         }
     ];
     handleDelete = user => {
-        alert(user.id);
+        this.props.dispatch(deleteUser(user.id)).then(res=>this.props.dispatch(getUserData()));
     };
     handleSubmit = (userSubmit,userId) => {
-        console.log(userSubmit)
-        console.log(userId)
+        this.props.dispatch(postUser(userSubmit,userId)).then(res=>this.props.dispatch(getUserData()));
     }
-    showUpdateForm(user){
+    async showUpdateForm(user){
+        await this.props.dispatch(getUserDataById(user.id));
+        console.log(this.props.user)
         this.setState({
             modalShow: !this.state.modalShow,
-            modalUser: user
-        })
+            modalUser: this.props.user,
+        });
     }
+
+    async handleInfor(user){
+        await this.props.dispatch(getUserDataById(user.id));
+        this.setState({
+         modalShow: !this.state.modalShow,
+         modalUser: this.props.user,
+        });
+     }
     componentDidMount = async () => {
         await this.props.dispatch(getUserData());
-        this.setState({user: this.props.user})
+        this.setState({user: this.props.users})
     }
     toggle = () => {
         this.setState({
@@ -81,7 +91,7 @@ class ManageUser extends Component {
     getData = () => {
         const {pageSize, currentPage, searchQuery} = this.state;
         const dataPagination = paginate(
-            this.props.user.data,
+            this.props.users.data,
             currentPage,
             pageSize
         )
@@ -102,7 +112,7 @@ class ManageUser extends Component {
             modalUser,
             modalShow,
           } = this.state;
-          const itemsCount = this.props.user.data.length;
+          const itemsCount = this.props.users.data.length;
           const{data: dataPagination} = this.getData();
         return (
             <div style={{ marginLeft: "100px", marginRight: "50px" }}>
@@ -129,7 +139,7 @@ class ManageUser extends Component {
     }
 }
 const mapStateToProps = state => {
-    return { user: state.user};
+    return { users: state.user, user: state.user.dataById};
 };
 
 export default connect(mapStateToProps)(ManageUser);

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { paginate } from "../utils/paginate";
 import Table from "../utils/table/table";
-import { getTermData } from "../../actions/term_actions";
+import { getTermData,deleteTerm,postTerm } from "../../actions/term_actions";
 import ModalAddUpdate from "./modalAddUpdate";
 import Pagination from "../utils/pagination";
 
@@ -49,12 +49,15 @@ class ManageTerm extends Component {
     }
   ];
   handleDelete = term => {
-    alert(term.id);
+    var result = window.confirm("Do you want delete this term?");
+    if(result){
+      this.props.dispatch(deleteTerm(term.id)).then(res => this.props.dispatch(getTermData()));
+    }
+    
   };
 
   handleSubmit = (termSubmit, termId) => {
-    console.log(termSubmit)
-    console.log(termId)
+    this.props.dispatch(postTerm(termSubmit,termId)).then(res => this.props.dispatch(getTermData()));
   }
 
   showUpdateForm(ter) {
