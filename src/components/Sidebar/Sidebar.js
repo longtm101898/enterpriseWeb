@@ -1,18 +1,24 @@
 import React from "react";
+import styled from "styled-components";
 import { withRouter, Link } from "react-router-dom";
 import cwApi from "../../axios-ew";
 import SideNav, {
   NavItem,
+  Nav,
   NavIcon,
   NavText,
-  Toggle
-} from "@trendmicro/react-sidenav";
+  NavHeader,
+  Toggle,
+  NavTitle,
+  NavSubTitle
+} from "./SidebarStyled";
 import "@trendmicro/react-sidenav/dist/react-sidenav.css";
 import { getCurrentUser } from "../../services/authService";
 import history from "../../history";
+import ClickOutside from "./ClickOutside";
 
 class Sidebar extends React.Component {
-  state = { functions: [] };
+  state = { functions: [], expanded: false };
   showSettings(event) {
     event.preventDefault();
   }
@@ -41,54 +47,70 @@ class Sidebar extends React.Component {
     const { functions } = this.state;
 
     return (
-      <SideNav
-        onSelect={selected => {
-          const to = "/" + selected;
-          if (window.location.pathname !== to) {
-            history.push(to);
-          }
+      <ClickOutside
+        onClickOutside={() => {
+          this.setState({ expanded: false });
         }}
       >
-        <Toggle />
-        <SideNav.Nav defaultSelected="home">
-          <NavItem eventKey="home">
-            <NavIcon>
-              <i className="fa fa-fw fa-home" style={{ fontSize: "1.75em" }} />
-            </NavIcon>
-            <NavText>Home</NavText>
-          </NavItem>
-          {/* <NavItem eventKey="demo"> */}
-          {/* <NavIcon>
+        <SideNav
+          expanded={this.state.expanded}
+          onToggle={expanded => {
+            this.setState({ expanded });
+          }}
+          onSelect={selected => {
+            const to = "/" + selected;
+            if (window.location.pathname !== to) {
+              history.push(to);
+            }
+          }}
+        >
+          <Toggle />
+          <NavHeader expanded={this.state.expanded}>
+            <NavTitle>COMP1640</NavTitle>
+            <NavSubTitle>Contribution management</NavSubTitle>
+          </NavHeader>
+          <Nav defaultSelected="home">
+            <NavItem eventKey="home">
+              <NavIcon>
+                <i
+                  className="fa fa-fw fa-home"
+                  style={{ fontSize: "1.75em" }}
+                />
+              </NavIcon>
+              <NavText>Home</NavText>
+            </NavItem>
+            {/* <NavItem eventKey="demo"> */}
+            {/* <NavIcon>
               <i className="fa fa-fw fa-user" style={{ fontSize: "1.75em" }} />
             </NavIcon>
             <NavText>System</NavText> */}
-          {functions.map((item, i) => {
-            if (!item.parentId) {
-              console.log(item)
-              return (
-                <NavItem eventKey={item.url} key={item.id}>
-                  <NavIcon>
-                    <i
-                      className={item.iconCss}
-                      style={{ fontSize: "1.75em" }}
-                    />
-                  </NavIcon>
-                  <NavText>{item.name}</NavText>
-                  {item.childFunctions &&
-                    item.childFunctions.map((item, i) => (
-                      <NavItem key={item.id} eventKey={item.url}>
-                        <NavText>
-                          <Link to={item.url}>{item.name}</Link>
-                        </NavText>
-                      </NavItem>
-                    ))}
-                </NavItem>
-              );
-            }
-          })}
-          {/* </NavItem> */}
-        </SideNav.Nav>
-      </SideNav>
+            {functions.map((item, i) => {
+              if (!item.parentId) {
+                return (
+                  <NavItem eventKey={item.url} key={item.id}>
+                    <NavIcon>
+                      <i
+                        className={item.iconCss}
+                        style={{ fontSize: "1.75em" }}
+                      />
+                    </NavIcon>
+                    <NavText>{item.name}</NavText>
+                    {item.childFunctions &&
+                      item.childFunctions.map((item, i) => (
+                        <NavItem key={item.id} eventKey={item.url}>
+                          <NavText>
+                            <Link to={item.url}>{item.name}</Link>
+                          </NavText>
+                        </NavItem>
+                      ))}
+                  </NavItem>
+                );
+              }
+            })}
+            {/* </NavItem> */}
+          </Nav>
+        </SideNav>
+      </ClickOutside>
     );
   }
 }
