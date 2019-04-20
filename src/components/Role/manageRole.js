@@ -94,7 +94,7 @@ class ManageRole extends Component {
     } = this.state;
     const { data: dataPagination } = this.getData();
     return (
-      <div style={{ marginLeft: "100px", marginRight: "50px" }}>
+      <div style={{ marginLeft: "50px" }}>
         <h1 className="h3 mb-2 text-gray-800">Manage Roles</h1>
         <button onClick={this.toggle}>Add new role</button>
         <ModalAddUpdate

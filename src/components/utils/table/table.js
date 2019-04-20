@@ -7,7 +7,7 @@ const Table = ({ columns, sortColumn, onSort, data }) => {
     <div className="card shadow mb-4">
       <div className="card-body">
         <div className="table-responsive">
-          <table className="table table-bordered" style={{ margin: "0 auto",width: "50%" }}>
+          <table className="table table-bordered" style={{ margin: "0 auto",width: "100%" }} cellSpacing="0">
             <TableHeader
               columns={columns}
               sortColumn={sortColumn}

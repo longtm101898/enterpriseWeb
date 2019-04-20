@@ -19,14 +19,22 @@ class App extends Component {
       <Layout>
         <ToastContainer />
         <Switch>
-          <Route path="/" exact component={Dashboard} />
+          <ProtectedRoute path="/" exact component={Dashboard} />
           <ProtectedRoute path="/system/role" exact component={ManageRole} />
           <Route path="/login" exact component={Login} />
-          <Route path="/faculties/view" exact component={ManageFaculties} />
-          <Route path="/function" component={ManageFunction}/>
-          <Route path="/contribution/view" exact component={ManageContribution} />
-          <Route path="/term/view" exact component={ManageTerm}/>
-          <Route path="/system/user" exact component={ManageUser} />
+          <ProtectedRoute
+            path="/system/faculties"
+            exact
+            component={ManageFaculties}
+          />
+          <ProtectedRoute path="/function" component={ManageFunction} />
+          <ProtectedRoute
+            path="/contribution/view"
+            exact
+            component={ManageContribution}
+          />
+          <ProtectedRoute path="/system/term" exact component={ManageTerm} />
+          <ProtectedRoute path="/system/user" exact component={ManageUser} />
         </Switch>
       </Layout>
     );

@@ -10,7 +10,6 @@ const ProtectedRoute = ({ path, component: Component, render, ...rest }) => {
       render={props => {
         if (!getCurrentUser()) {
           toast.error("Unauthorized!!!");
-          console.log('err')
           return (
             <Redirect
               to={{

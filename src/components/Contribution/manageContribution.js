@@ -2,8 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { paginate } from "../utils/paginate";
 import Table from "../utils/table/table";
-import { getContributionData,deleteContribution,postContribution } from "../../actions/contribution_actions";
-import {getTermData} from "../../actions/term_actions";
+import {
+  getContributionData,
+  deleteContribution,
+  postContribution
+} from "../../actions/contribution_actions";
+import { getTermData } from "../../actions/term_actions";
 import ModalAddUpdate from "./modalAddUpdate";
 import Pagination from "../utils/pagination";
 import { getCurrentUser } from "../../services/authService";
@@ -42,8 +46,6 @@ class ManageContribution extends Component {
       path: "comment",
       label: "Comment"
     },
-    
-
     {
       key: "update",
       content: con => (
@@ -73,14 +75,26 @@ class ManageContribution extends Component {
   }
 
   handleDelete = con => {
-    this.props.dispatch(deleteContribution(con.id)).then(this.props.dispatch(getContributionData(this.state.user.Id, this.state.user.Roles)));
+    this.props
+      .dispatch(deleteContribution(con.id))
+      .then(
+        this.props.dispatch(res =>
+          getContributionData(this.state.user.Id, this.state.user.Roles)
+        )
+      );
   };
 
-  handleSubmit = (conSubmit, conId, img, word,userId,termId) => {
+  handleSubmit = (conSubmit, conId, img, word, userId, termId) => {
     var termId = this.state.term.id;
     var userId = this.state.user.Id;
-    this.props.dispatch(postContribution(conSubmit, conId, img, word,userId,termId)).then(this.props.dispatch(getContributionData(this.state.user.Id, this.state.user.Roles)));
-  }
+    this.props
+      .dispatch(postContribution(conSubmit, conId, img, word, userId, termId))
+      .then(res =>
+        this.props.dispatch(
+          getContributionData(this.state.user.Id, this.state.user.Roles)
+        )
+      );
+  };
 
   showUpdateForm(con) {
     this.setState({
@@ -99,14 +113,14 @@ class ManageContribution extends Component {
     d1.setDate(d1.getDate() - 15);
     this.setState({
       disbaledAdd: d2 > d1 ? true : false
-    })
-  }
+    });
+  };
 
   componentDidMount = async () => {
     var user = getCurrentUser();
     this.setState({
       user: user
-    })
+    });
     await this.props.dispatch(getContributionData(user.Id, user.Roles));
     this.setState({ contribution: this.props.contribution });
   };
@@ -120,32 +134,28 @@ class ManageContribution extends Component {
 
   getData = () => {
     const { pageSize, currentPage, searchQuery } = this.state;
-    
-    let filtered = this.props.contribution.data
+
+    let filtered = this.props.contribution.data;
     if (searchQuery) {
       filtered = this.props.contribution.data.filter(m =>
         m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
     }
 
-    const dataPagination = paginate(
-      filtered,
-      currentPage,
-      pageSize
-    );
-    return { data: dataPagination, itemsCount:filtered.length};
+    const dataPagination = paginate(filtered, currentPage, pageSize);
+    return { data: dataPagination, itemsCount: filtered.length };
   };
-  handlePageChange = page =>{
+  handlePageChange = page => {
     this.setState({
       currentPage: page
-    })
-  }
-  handleSearch = (event) =>{
+    });
+  };
+  handleSearch = event => {
     const element = event.target.value;
     this.setState({
-      searchQuery : element
-    })
-  }
+      searchQuery: element
+    });
+  };
 
   render() {
     const {
@@ -155,16 +165,27 @@ class ManageContribution extends Component {
       modalShow,
       disbaledAdd
     } = this.state;
-    const { data: dataPagination, itemsCount:itemsCount } = this.getData();
+    const { data: dataPagination, itemsCount: itemsCount } = this.getData();
     return (
-      <div style={{ marginLeft: "100px", marginRight: "50px" }}>
+      <div style={{ marginLeft: "50px" }}>
         <h1 className="h3 mb-2 text-gray-800">Manage Contribution</h1>
         <div className="row justify-content-center">
           <div className="col-4">
-            <input placeholder="Search....." type="text" className="form-control" onChange={this.handleSearch} />
+            <input
+              placeholder="Search....."
+              type="text"
+              className="form-control"
+              onChange={this.handleSearch}
+            />
           </div>
           <div className="col-4">
-            <button onClick={this.toggle} disabled={disbaledAdd} className="btn btn-info" >Add new Contribution</button>
+            <button
+              onClick={this.toggle}
+              disabled={disbaledAdd}
+              className="btn btn-info"
+            >
+              Add new Contribution
+            </button>
           </div>
         </div>
         <ModalAddUpdate
@@ -175,17 +196,16 @@ class ManageContribution extends Component {
         />
         <Table data={dataPagination} columns={this.columns} />
         <Pagination
-       itemsCount={itemsCount}
-       pageSize={pageSize}
-       currentPage={currentPage}
-       onPageChange={this.handlePageChange}
-       />
-
+          itemsCount={itemsCount}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          onPageChange={this.handlePageChange}
+        />
       </div>
     );
   }
 }
 const mapStateToProps = state => {
-  return { contribution: state.contribution, term: state.term  };
+  return { contribution: state.contribution, term: state.term };
 };
 export default connect(mapStateToProps)(ManageContribution);
