@@ -81,13 +81,19 @@ class ManageTerm extends Component {
 
   getData = () => {
     const { pageSize, currentPage, searchQuery } = this.state;
+    let filtered = this.props.term.data;
+    if (searchQuery) {
+      filtered = this.props.term.data.filter(m =>
+        m.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+      );
+    }
     const dataPagination = paginate(
-      this.props.term.data,
+      filtered,
       currentPage,
       pageSize
     );
     console.log(this.state);
-    return { data: dataPagination};
+    return { data: dataPagination, itemsCount: filtered.length};
   };
   
   handlePageChange = page =>{
@@ -95,21 +101,42 @@ class ManageTerm extends Component {
       currentPage: page
     })
   }
+  handleSearch = event => {
+    const element = event.target.value;
+    this.setState({
+      searchQuery: element
+    });
+  };
+
 
   render() {
     const {
       pageSize,
       currentPage,
-      searchQuery,
       modalTerm,
       modalShow
     } = this.state;  
-    const itemsCount = this.props.term.data.length;
-    const { data: dataPagination } = this.getData();
+    const { data: dataPagination, itemsCount: itemsCount } = this.getData();
     return (
       <div style={{ marginLeft: "50px" }}>
-        <h1 className="h3 mb-2 text-gray-800">Manage Term</h1>
-        <button onClick={this.toggle}>Add new Term</button>
+       <h1 className="h3 mb-2 text-gray-800 text-center">Manage Term</h1>
+        <div className="row justify-content-end">
+          <div className="col-6">
+            <input
+              placeholder="Search Contribution Title"
+              type="text"
+              className="form-control"
+              onChange={this.handleSearch}
+            /></div>
+          <div className="col-4">
+            <button
+              onClick={this.toggle}
+              className="btn btn-info"
+            >
+              Add new Term
+            </button>
+          </div>
+        </div>
         <ModalAddUpdate
           show={modalShow}
           toggle={this.toggle}

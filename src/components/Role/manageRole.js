@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import Table from "../utils/table/table";
 import { paginate } from "../utils/paginate";
 import { connect } from "react-redux";
-import { getRoleData } from "../../actions/role_actions";
+import { getRoleData, postData, putData, deleteData } from "../../actions/role_actions";
 import ModalAddUpdate from "./modalAddUpdate";
-import { getCurrentUser, hasPermission } from "../../services/authService";
+import { hasPermission } from "../../services/authService";
+import Pagination from "../utils/pagination";
 
 class ManageRole extends Component {
   state = {
@@ -49,12 +50,19 @@ class ManageRole extends Component {
     }
   ];
   handleDelete = role => {
-    alert(role.id);
+    var result = window.confirm("Do you want delete this role?");
+    if(result){
+      this.props.dispatch(deleteData(role.id)).then(res => this.props.dispatch(getRoleData()));
+    }  
   };
 
   handleSubmit = (role, roleId) => {
-    console.log(role)
-    console.log(roleId)
+    if(roleId === ""){
+      this.props.dispatch(postData(role)).then(res => this.props.dispatch(getRoleData()));
+    }
+    else{
+      this.props.dispatch(putData(role, roleId)).then(res => this.props.dispatch(getRoleData()));
+    }
   }
 
   showUpdateForm(role) {
@@ -77,26 +85,59 @@ class ManageRole extends Component {
   };
   getData = () => {
     const { pageSize, currentPage, searchQuery } = this.state;
+    let filtered = this.props.roles.data;
+    if (searchQuery) {
+      filtered = this.props.roles.data.filter(m =>
+        m.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+      );
+    }
     const dataPagination = paginate(
-      this.props.roles.data,
+      filtered,
       currentPage,
       pageSize
     );
-    return { data: dataPagination };
+    return { data: dataPagination, itemsCount: filtered.length};
   };
+  handleSearch = event => {
+    const element = event.target.value;
+    this.setState({
+      searchQuery: element
+    });
+  };
+
+  handlePageChange = (page) => {
+    this.setState({
+        currentPage: page
+    })
+};
   render() {
     const {
       pageSize,
       currentPage,
-      searchQuery,
       modalRole,
       modalShow
     } = this.state;
-    const { data: dataPagination } = this.getData();
+    const { data: dataPagination, itemsCount: itemsCount } = this.getData();
     return (
       <div style={{ marginLeft: "50px" }}>
-        <h1 className="h3 mb-2 text-gray-800">Manage Roles</h1>
-        <button onClick={this.toggle}>Add new role</button>
+       <h1 className="h3 mb-2 text-gray-800 text-center">Manage Role</h1>
+        <div className="row justify-content-end">
+          <div className="col-6">
+            <input
+              placeholder="Search Role Name"
+              type="text"
+              className="form-control"
+              onChange={this.handleSearch}
+            /></div>
+          <div className="col-4">
+            <button
+              onClick={this.toggle}
+              className="btn btn-info"
+            >
+              Add new Role
+            </button>
+          </div>
+        </div>
         <ModalAddUpdate
           show={modalShow}
           toggle={this.toggle}
@@ -104,6 +145,12 @@ class ManageRole extends Component {
           onSubmit={this.handleSubmit}
         />
         <Table data={dataPagination} columns={this.columns} />
+        <Pagination
+          itemsCount={itemsCount}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          onPageChange={this.handlePageChange}
+        />
       </div>
     );
   }

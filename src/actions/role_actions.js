@@ -11,3 +11,21 @@ export const getRoleData = () => async dispatch => {
     .then(res => dispatch({ type: GET_ROLE_DATA, payload: res.data }))
     .catch(err => console.log(err));
 };
+
+export const postData = (role) => async dispatch =>{
+  await ewApi
+  .post("approle", role)
+  .then(res =>console.log(res));
+};
+
+export const putData = (role, roleId) => async dispatch =>{
+  await ewApi
+  .put("approle/" + roleId, role)
+  .then(res => console.log(res));
+};
+
+export const deleteData = (roleId) => async dispatch =>{
+  await ewApi
+  .delete("approle/" + roleId)
+  .then(res => console.log(res));
+}

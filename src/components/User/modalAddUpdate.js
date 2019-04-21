@@ -140,7 +140,6 @@ class modalAddUpdate extends Component {
         if (this.props.roles.data[i].name == nextProps.userInfo.roles[0]) {
           nextProps.userInfo.roles = this.props.roles.data[i].id
         }
-
       }
       var userForm = populateFields(this.state.formData, nextProps.userInfo);
       this.setState({ formData: userForm, userId: nextProps.userInfo.id });

@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { paginate } from "../utils/paginate";
 import Table from "../utils/table/table";
-import { getFacultiesData } from "../../actions/faculties_actions";
+import { getFacultiesData, deleteFaculties, postFaculties } from "../../actions/faculties_actions";
 import ModalAddUpdate from "./modalAddUpdate";
+import Pagination from "../utils/pagination";
 
 class ManageFaculties extends Component {
   state = {
@@ -44,12 +45,14 @@ class ManageFaculties extends Component {
     }
   ];
   handleDelete = fac => {
-    alert(fac.id);
+    var result = window.confirm("Do you want delete this faculties?");
+    if(result){
+      this.props.dispatch(deleteFaculties(fac.id)).then(res => this.props.dispatch(getFacultiesData()));
+    }  
   };
 
   handleSubmit = (facSubmit, facId) => {
-    console.log(facSubmit)
-    console.log(facId)
+    this.props.dispatch(postFaculties(facSubmit,facId)).then(res => this.props.dispatch(getFacultiesData()));
   }
 
   showUpdateForm(fac) {
@@ -73,27 +76,61 @@ class ManageFaculties extends Component {
 
   getData = () => {
     const { pageSize, currentPage, searchQuery } = this.state;
+    let filtered = this.props.faculties.data;
+    if (searchQuery) {
+      filtered = this.props.faculties.data.filter(m =>
+        m.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+      );
+    }
     const dataPagination = paginate(
-      this.props.faculties.data,
+      filtered,
       currentPage,
       pageSize
     );
-    return { data: dataPagination };
+    return { data: dataPagination, itemsCount: filtered.length };
+  };
+
+  handlePageChange = page => {
+    this.setState({
+      currentPage: page
+    });
+  };
+
+  handleSearch = event => {
+    const element = event.target.value;
+    this.setState({
+      searchQuery: element
+    });
   };
 
   render() {
     const {
       pageSize,
       currentPage,
-      searchQuery,
       modalFaculties,
       modalShow
     } = this.state;
-    const { data: dataPagination } = this.getData();
+    const { data: dataPagination, itemsCount: itemsCount  } = this.getData();
     return (
       <div style={{ marginLeft: "50px" }}>
-        <h1 className="h3 mb-2 text-gray-800">Manage Faculties</h1>
-        <button onClick={this.toggle}>Add new faculties</button>
+         <h1 className="h3 mb-2 text-gray-800 text-center">Manage Faculties</h1>
+        <div className="row justify-content-end">
+          <div className="col-6">
+            <input
+              placeholder="Search Faculties Name"
+              type="text"
+              className="form-control"
+              onChange={this.handleSearch}
+            /></div>
+          <div className="col-4">
+            <button
+              onClick={this.toggle}
+              className="btn btn-info"
+            >
+              Add new Faculties
+            </button>
+          </div>
+        </div>
         <ModalAddUpdate
           show={modalShow}
           toggle={this.toggle}
@@ -102,6 +139,12 @@ class ManageFaculties extends Component {
         />
         
         <Table data={dataPagination} columns={this.columns} />
+        <Pagination
+          itemsCount={itemsCount}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          onPageChange={this.handlePageChange}
+        />
       </div>
     );
   }

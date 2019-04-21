@@ -104,7 +104,7 @@ class ModelAddUpdate extends Component {
   };
 
   handleFile = acceptedFiles => {
-    if (acceptedFiles.length != 0) {
+    if (acceptedFiles.length !== 0) {
       var ext = acceptedFiles[0].name.substring(
         acceptedFiles[0].name.lastIndexOf(".")
       );
@@ -150,11 +150,13 @@ class ModelAddUpdate extends Component {
           <ModalHeader>Student Submit & Update Form</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
+              <label>Title:</label>
               <FormField
                 id="title"
                 formdata={this.state.formData.title}
                 change={e => this.updateForm(e)}
               />
+               <label>Description:</label>
               <FormField
                 id="description"
                 formdata={this.state.formData.description}
@@ -217,6 +219,18 @@ class ModelAddUpdate extends Component {
                   onChange={this.handleChange}
                 />
                 <label>I agree to the Terms and Conditions</label>
+                <div>
+                      <p>Student contributions must be in word format and be smaller than 1 MB
+                    Images submitted by students must have high image quality such as photograph, ...<br></br>
+                    Images must be carefully reviewed before uploading.<br></br>
+                    Images must not contain violent and sexy information.<br></br>
+                    Images uploaded by students must be smaller than 20 MB.<br></br>
+                    Students can upload contributions within 45 days from the start of each term to the closure date.<br></br>
+                    Students can edit contributions for 2 months from the start of each term to the final closure date.<br></br>
+                    Students can upload many contributions. Each contribution can only be uploaded to one-word file and one image file.<br></br>
+                    The approved contributions by marketing coordinator will not be updated anymore.<br></br>
+                    Students should read the term and condition carefully before submitting.</p>
+                  </div>
               </div>
             </form>
           </ModalBody>

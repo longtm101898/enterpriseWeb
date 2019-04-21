@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./components/dashboard";
 import ProtectedRoute from "./shared/protectedRoute";
 import ManageUser from "./components/User/manageUser";
+import UserProfile from "./components/User/userProfile";
 
 class App extends Component {
   render() {
@@ -35,6 +36,7 @@ class App extends Component {
           />
           <ProtectedRoute path="/system/term" exact component={ManageTerm} />
           <ProtectedRoute path="/system/user" exact component={ManageUser} />
+          <ProtectedRoute path="/user/profile" exact component={UserProfile} />
         </Switch>
       </Layout>
     );

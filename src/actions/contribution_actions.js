@@ -21,4 +21,11 @@ export const deleteContribution = (conId)=> async dispatch =>{
     .then(res => console.log(res))
 };
 
+export const postCommentContribution = (conId,comment,status) => async dispatch =>{
+    await ewApi
+    .post("contribution/updatecomment?conId="+conId+"&comment="+comment+"&status="+status
+    )
+    .then(res => console.log(res)).catch(err=> console.log(err))
+}
+
 

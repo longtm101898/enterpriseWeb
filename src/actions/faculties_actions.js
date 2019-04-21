@@ -6,3 +6,15 @@ export const getFacultiesData = () => async dispatch => {
     .get("faculties")
     .then(res => dispatch({ type: GET_FACULTIES_DATA, payload: res.data }));
 };
+
+export const postFaculties = (fac, facId) => async dispatch =>{
+  await ewApi
+  .post("faculties?facId="+facId, fac)
+  .then(res => console.log(res));
+};
+
+export const deleteFaculties = (facId) => async dispatch =>{
+  await ewApi
+  .delete("faculties/"+facId)
+  .then(res => console.log(res));
+};
