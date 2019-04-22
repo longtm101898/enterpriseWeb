@@ -150,26 +150,26 @@ class ModelAddUpdate extends Component {
       padding: "54px 54px"
     };
     const { disableButton } = this.state;
-    console.log(this.state.term)
+    const styleLabel = {fontWeight: "bold"};
     return (
       <div style={{ margin: "0 auto" }}>
         <Modal isOpen={this.props.show} className="modal-lg">
           <ModalHeader toggle={this.props.toggle}>Student Submit & Update Form</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
-              <label>Title:</label>
+              <label style={styleLabel}>Title:</label>
               <FormField
                 id="title"
                 formdata={this.state.formData.title}
                 change={e => this.updateForm(e)}
               />
-               <label>Description:</label>
+               <label style={styleLabel}>Description:</label>
               <FormField
                 id="description"
                 formdata={this.state.formData.description}
                 change={e => this.updateForm(e)}
               />
-              <label>Word file: </label>
+              <label style={styleLabel}>Word file: </label>
               <Dropzone onDrop={this.handleFile} accept=".doc,.docx">
                 {({ getRootProps, getInputProps, acceptedFiles }) => (
                   <section>
@@ -195,7 +195,7 @@ class ModelAddUpdate extends Component {
                   </section>
                 )}
               </Dropzone>
-              <label>Image File: </label>
+              <label style={styleLabel}>Image File: </label>
               <Dropzone onDrop={this.handleFile} accept="image/*">
                 {({ getRootProps, getInputProps, acceptedFiles }) => (
                   <section>

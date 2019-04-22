@@ -1,5 +1,5 @@
 import ewApi from '../axios-ew';
-import {GET_CONTRIBUTION_DATA} from './types';
+import {GET_CONTRIBUTION_DATA, GET_CONTRIBUTION_BY_ID} from './types';
 
 export const getContributionData = (userId,role) => async dispatch =>{
     await ewApi
@@ -26,6 +26,12 @@ export const postCommentContribution = (conId,comment,status) => async dispatch 
     .post("contribution/updatecomment?conId="+conId+"&comment="+comment+"&status="+status
     )
     .then(res => console.log(res)).catch(err=> console.log(err))
+};
+
+export const getContributionById = (conId) => async dispatch =>{
+    await ewApi
+    .get("contribution/"+conId)
+    .then(res => dispatch({type : GET_CONTRIBUTION_BY_ID, payload: res.data}))
 }
 
 

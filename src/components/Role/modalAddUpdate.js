@@ -96,19 +96,20 @@ class ModalAddUpdate extends Component {
   };
 
   render() {
+    const styleLabel = {fontWeight: "bold"};
     return (
       <div>
         <Modal isOpen={this.props.show} toggle={this.props.toggle}>
           <ModalHeader>Role add</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
-            <label>Name:</label>
+            <label style={styleLabel}>Name:</label>
               <FormField
                 id={"name"}
                 formdata={this.state.formData.name}
                 change={element => this.updateForm(element)}
               />
-               <label>Description:</label>
+               <label style={styleLabel}>Description:</label>
               <FormField
                 id={"description"}
                 formdata={this.state.formData.description}

@@ -127,11 +127,12 @@ class userProfile extends Component {
         
 	}
 	render() {
+		const styleLabel = {fontWeight: "bold"};
 		return (
 			<div className="container text-left" style={{marginLeft: '25px'}}>
 				<div className="row m-y-2">
 					<div className="col-lg-4 pull-lg-8 text-xs-center">
-						<label htmlFor="file-input">
+						<label htmlFor="file-input" >
 						<img src="//placehold.it/200" className="m-x-auto img-fluid img-circle" alt="avatar" />
 						</label>		
 						<input type="file" id="file-input" style={{display: "none"}} />
@@ -140,25 +141,25 @@ class userProfile extends Component {
 							<div className="tab-pane" id="edit">
 								<h4 className="m-y-2">Edit Profile</h4>
 								<form>
-								<label>Fullname:</label>
+								<label style={styleLabel}>Fullname:</label>
 									<FormField
 										id="fullName"
 										formdata={this.state.formData.fullName}
 										change={(e) => this.updateForm(e)}
 									/>
-									 <label>Email:</label>
+									 <label style={styleLabel}>Email:</label>
 									<FormField
 										id="email"
 										formdata={this.state.formData.email}
 										change={(e) => this.updateForm(e)}
 									/>
-									 <label>Phone Number:</label>
+									 <label style={styleLabel}>Phone Number:</label>
 									<FormField
 										id="phoneNumber"
 										formdata={this.state.formData.phoneNumber}
 										change={(e) => this.updateForm(e)}
 									/>
-									 <label>Faculties:</label>
+									 <label style={styleLabel}>Faculties:</label>
 									<FormField
 										id="facultiesId"
 										formdata={this.state.formData.facultiesId}

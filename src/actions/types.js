@@ -18,6 +18,7 @@ export const GET_FUNCTION_DATA = "GET_FUNCTION_DATA";
 
 //Contribution
 export const GET_CONTRIBUTION_DATA = "GET_CONTRIBUTION_DATA";
+export const GET_CONTRIBUTION_BY_ID = "GET_CONTRIBUTION_BY_ID"
 
 //Term
 export const GET_TERM_DATA = "GET_TERM_DATA";

@@ -36,7 +36,7 @@ class ModalComment extends Component {
           name: "facultiesId_input",
           options: [
             { key: 0, value: "Waiting" },
-            { key: 1, value: "Cancel" },
+            { key: 1, value: "Cancelled" },
             { key: 2, value: "published" }
           ]
         },
@@ -107,20 +107,21 @@ class ModalComment extends Component {
 
   render() {
     const { title, description, fileURL, imageURL, dateCreated } = this.state;
+    const styleLabel = {fontWeight: "bold"};
     return (
       <div style={{ margin: "0 auto" }}>
         <Modal isOpen={this.props.show} className="modal-lg">
           <ModalHeader>Student Comment Form</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
-              <label>Title: </label>
+              <label style={styleLabel}>Title: </label>
               <p>{title}</p>
-              <label>Description:</label>
+              <label style={styleLabel}>Description:</label>
               <p>{description}</p>
-              <label>File Word: </label>
+              <label style={styleLabel}>File Word: </label>
               <a href={"http://localhost:49763/" + fileURL}> {title}</a>
               <br />
-              <label>File Image:</label>
+              <label style={styleLabel}>File Image:</label>
               <img
                 width="200"
                 height="300"
@@ -128,15 +129,15 @@ class ModalComment extends Component {
                 alt={title}
               />
               <br />
-              <label>Date Created:</label>
+              <label style={styleLabel}>Date Created:</label>
               <p>{dateCreated}</p>
-              <label>Comment: </label>
+              <label style={styleLabel}>Comment: </label>
               <FormField
                 id="comment"
                 formdata={this.state.formData.comment}
                 change={e => this.updateForm(e)}
               />
-              <label>Status:</label>
+              <label style={styleLabel}>Status:</label>
               <FormField
                 id="status"
                 formdata={this.state.formData.status}

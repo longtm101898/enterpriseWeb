@@ -6,7 +6,8 @@ import {
   getContributionData,
   deleteContribution,
   postContribution,
-  postCommentContribution
+  postCommentContribution,
+  getContributionById
 } from "../../actions/contribution_actions";
 import { getCurrentTerm } from "../../actions/term_actions";
 import ModalAddUpdate from "./modalAddUpdate";
@@ -34,12 +35,12 @@ class ManageContribution extends Component {
       label: "Description"
     },
     {
-      path: "periodEdited",
-      label: "Period Edited"
-    },
-    {
       path: "comment",
       label: "Comment"
+    },
+    {
+      path: "termName",
+      label: "Term Name"
     },
     {
       key: "update",
@@ -48,6 +49,7 @@ class ManageContribution extends Component {
           <button
             onClick={() => this.showUpdateForm(con)}
             className="btn btn-primary btn-sm"
+            disabled={this.handleDisabled(con)}
           >
             <i className="fa fa-pen" />
           </button>
@@ -59,25 +61,22 @@ class ManageContribution extends Component {
           </button>
           <button
             onClick={() => this.handleComment(con)}
-            className="btn btn-danger btn-sm"
+            className="btn btn-secondary btn-sm"
           >
             <i className="fa fa-comment" />
           </button>
-          <button
-           onClick={() => this.handleDownload(con)}
-           className="btn btn-success btn-sm">
-            <i className="fa fa-download" />
-          </button>
+
 
         </React.Fragment>
       )
     }
   ];
 
-  handleDownload(con){
+  handleDownload(con) {
     console.log("download")
   }
-  handleComment(con) {
+  async handleComment(con) {
+    await this.props.dispatch(getContributionById(con.id));
     this.setState({
       modalComment: !this.state.modalComment,
       modalContribution: con
@@ -85,10 +84,9 @@ class ManageContribution extends Component {
   }
 
   handleDisabled(con) {
-    var d1 = new Date(con.periodEdited);
+    var d1 = new Date(con.closingDate);
     var d2 = new Date();
-    d1.setDate(d1.getDate() + 15);
-    return d2 < d1 ? true : false;
+    return d2 > d1 ? true : false;
   }
 
   handleDelete = con => {
@@ -114,7 +112,6 @@ class ManageContribution extends Component {
 
   handleSubmit = (conSubmit, conId, img, word, userId) => {
     var termId = this.state.term.id;
-    var userId = this.state.user.Id;
     this.props
       .dispatch(postContribution(conSubmit, conId, img, word, userId, termId))
       .then(res =>
@@ -124,18 +121,21 @@ class ManageContribution extends Component {
       );
   };
 
-  showUpdateForm(con) {
+  async showUpdateForm(con) {
+    await this.props.dispatch(getContributionById(con.id))
     this.setState({
       modalShow: !this.state.modalShow,
-      modalContribution: con
+      modalContribution: this.props.contribution.dataById
     });
   }
 
   componentWillMount = async () => {
     await this.props.dispatch(getCurrentTerm());
-    if(this.props.term.curterm !== ""){
+
+    if (this.props.term.curterm !== "") {
       this.setState({
-        term: this.props.term.curterm
+        term: this.props.term.curterm,
+        terms: this.props.term.data
       });
       var d1 = new Date(this.state.term.closingDate);
       var d2 = new Date();
@@ -144,13 +144,13 @@ class ManageContribution extends Component {
         disbaledAdd: d2 < d1 ? true : false
       });
     }
-    else{
+    else {
       window.alert("You can't submit contribution now!!");
       this.setState({
         disbaledAdd: false
       });
     }
-    
+
   };
 
   componentDidMount = async () => {
@@ -163,19 +163,19 @@ class ManageContribution extends Component {
   };
 
   toggle = () => {
-    if(this.state.disbaledAdd === false && this.state.modalContribution === ""){
+    if (this.state.disbaledAdd === false && this.state.modalContribution === "") {
       this.setState({
         modalShow: false,
         modalContribution: ""
       });
     }
-    else{
+    else {
       this.setState({
         modalShow: !this.state.modalShow,
         modalContribution: ""
       });
     }
-   
+
   };
 
   toggleComment = () => {
@@ -235,15 +235,12 @@ class ManageContribution extends Component {
           <div className="col-4">
             <button
               onClick={this.toggle}
-              data-toggle="collapse"
-              href="#collapseExample"
               className="btn btn-info"
             >
               Add new Contribution
             </button>
-            {disbaledAdd === false ? <div className='collapse' id='collapseExample'> <div className='card card-body'>The Term is out of date</div></div>
-              : ""}
-           
+            {disbaledAdd === false ? <p style={{ color: "red" }}>The Term is out of date</p> : ""}
+
           </div>
         </div>
         <ModalComment
@@ -261,12 +258,25 @@ class ManageContribution extends Component {
         />
 
         <Table data={dataPagination} columns={this.columns} />
-        <Pagination
-          itemsCount={itemsCount}
-          pageSize={pageSize}
-          currentPage={currentPage}
-          onPageChange={this.handlePageChange}
-        />
+        <div className="row justify-content-start">
+          <div className="col-4">
+            <button
+              onClick={() => this.handleDownload()}
+              className="btn btn-success btn-sm">
+              <i className="fa fa-download" />
+            </button>
+          </div>
+          <div className="col-4">
+            <Pagination
+              itemsCount={itemsCount}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={this.handlePageChange}
+            />
+          </div>
+        </div>
+
+
       </div>
     );
   }

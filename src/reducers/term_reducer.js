@@ -1,7 +1,8 @@
-import { GET_TERM_DATA, GET_CURRENT_TERM } from "../actions/types";
+import { GET_TERM_DATA, GET_CURRENT_TERM} from "../actions/types";
 
 const initialState = {
   data: [],
+  dataById: null,
   curterm: null
 };
 function format(inputDate) {
@@ -28,6 +29,7 @@ export default function(state = initialState, action) {
         ...state,
         curterm: action.payload
       }
+  
     default:
       return state;
   }

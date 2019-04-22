@@ -92,19 +92,20 @@ class ModelAddUpdate extends Component {
       
       };
     render() {
+      const styleLabel = {fontWeight: "bold"};
         return (
             <div style={{ margin: '0 auto' }}>
                 <Modal isOpen={this.props.show} toggle={this.props.toggle}>
                     <ModalHeader>Add & Update Term</ModalHeader>
                     <ModalBody>
                         <form onSubmit={e => this.submitForm(e)}>
-                        <label>Name:</label>
+                        <label style={styleLabel}>Name:</label>
                         <FormField
                         id="name"
                         formdata={this.state.formData.name}
                         change={e => this.updateForm(e)}
                     />
-                     <label>Date Started:</label>
+                     <label style={styleLabel}>Date Started:</label>
                     <FormField
                         id="dateStarted"
                         formdata={this.state.formData.dateStarted}

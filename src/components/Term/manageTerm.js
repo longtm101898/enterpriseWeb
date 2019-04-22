@@ -145,7 +145,7 @@ class ManageTerm extends Component {
             >
               Add new Term
             </button>
-            {this.state.disableAdd && "The current term is operating"}
+            {this.state.disableAdd && <p style={{color:"red"}}>The current term is operating</p>}
           </div>
         </div>
         <ModalAddUpdate
