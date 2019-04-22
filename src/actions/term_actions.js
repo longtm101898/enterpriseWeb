@@ -10,13 +10,13 @@ export const getTermData = () => async dispatch =>{
 export const postTerm = (termSubmit, termId) => async dispatch =>{
     await ewApi
     .post("term?termId="+termId,termSubmit)
-    .then(res =>console.log(res))
+    
 };
 
 export const deleteTerm = (termId) => async dispatch =>{
     await ewApi
     .delete("term/" + termId)
-    .then(res => console.log(res))
+    
 }
 
 

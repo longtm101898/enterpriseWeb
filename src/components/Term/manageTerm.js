@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { paginate } from "../utils/paginate";
 import Table from "../utils/table/table";
-import { getTermData,deleteTerm,postTerm } from "../../actions/term_actions";
+import { getTermData, deleteTerm, postTerm } from "../../actions/term_actions";
 import ModalAddUpdate from "./modalAddUpdate";
 import Pagination from "../utils/pagination";
 
@@ -12,7 +12,8 @@ class ManageTerm extends Component {
     currentPage: 1,
     searchQuery: "",
     modalShow: false,
-    modalTerm: ""
+    modalTerm: "",
+    disableAdd: false
   };
 
   columns = [
@@ -50,15 +51,20 @@ class ManageTerm extends Component {
   ];
   handleDelete = term => {
     var result = window.confirm("Do you want delete this term?");
-    if(result){
-      this.props.dispatch(deleteTerm(term.id)).then(res => this.props.dispatch(getTermData()));
+    if (result) {
+      this.props
+        .dispatch(deleteTerm(term.id))
+        .then(res => this.props.dispatch(getTermData()).then(res => this.handleBtnAdd()));
+      
     }
-    
   };
 
   handleSubmit = (termSubmit, termId) => {
-    this.props.dispatch(postTerm(termSubmit,termId)).then(res => this.props.dispatch(getTermData()));
-  }
+    this.props
+      .dispatch(postTerm(termSubmit, termId))
+      .then(res => this.props.dispatch(getTermData()).then(res => this.handleBtnAdd()));
+   
+  };
 
   showUpdateForm(ter) {
     this.setState({
@@ -69,9 +75,22 @@ class ManageTerm extends Component {
 
   componentDidMount = async () => {
     await this.props.dispatch(getTermData());
+    this.handleBtnAdd();
     this.setState({ term: this.props.term });
   };
 
+  handleBtnAdd = () => {
+    if (this.props.term.data.length !== 0) {
+      var d1 = new Date();
+      var d2 = new Date(
+        this.props.term.data[this.props.term.data.length - 1].closingDate
+      );
+      var disableAdd = d2 < d1 ? false : true;
+      this.setState({ disableAdd });
+    } else {
+      this.setState({ disableAdd: false });
+    }
+  };
   toggle = () => {
     this.setState({
       modalShow: !this.state.modalShow,
@@ -87,20 +106,15 @@ class ManageTerm extends Component {
         m.name.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
     }
-    const dataPagination = paginate(
-      filtered,
-      currentPage,
-      pageSize
-    );
-    console.log(this.state);
-    return { data: dataPagination, itemsCount: filtered.length};
+    const dataPagination = paginate(filtered, currentPage, pageSize);
+    return { data: dataPagination, itemsCount: filtered.length };
   };
-  
-  handlePageChange = page =>{
+
+  handlePageChange = page => {
     this.setState({
       currentPage: page
-    })
-  }
+    });
+  };
   handleSearch = event => {
     const element = event.target.value;
     this.setState({
@@ -108,18 +122,12 @@ class ManageTerm extends Component {
     });
   };
 
-
   render() {
-    const {
-      pageSize,
-      currentPage,
-      modalTerm,
-      modalShow
-    } = this.state;  
+    const { pageSize, currentPage, modalTerm, modalShow } = this.state;
     const { data: dataPagination, itemsCount } = this.getData();
     return (
       <div style={{ marginLeft: "50px" }}>
-       <h1 className="h3 mb-2 text-gray-800 text-center">Manage Term</h1>
+        <h1 className="h3 mb-2 text-gray-800 text-center">Manage Term</h1>
         <div className="row justify-content-end">
           <div className="col-6">
             <input
@@ -127,14 +135,17 @@ class ManageTerm extends Component {
               type="text"
               className="form-control"
               onChange={this.handleSearch}
-            /></div>
+            />
+          </div>
           <div className="col-4">
             <button
               onClick={this.toggle}
               className="btn btn-info"
+              disabled={this.state.disableAdd}
             >
               Add new Term
             </button>
+            {this.state.disableAdd && "The current term is operating"}
           </div>
         </div>
         <ModalAddUpdate
@@ -144,12 +155,12 @@ class ManageTerm extends Component {
           onSubmit={this.handleSubmit}
         />
         <Table data={dataPagination} columns={this.columns} />
-       <Pagination
-       itemsCount={itemsCount}
-       pageSize={pageSize}
-       currentPage={currentPage}
-       onPageChange={this.handlePageChange}
-       />
+        <Pagination
+          itemsCount={itemsCount}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          onPageChange={this.handlePageChange}
+        />
       </div>
     );
   }

@@ -15,7 +15,6 @@ function format(inputDate) {
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_TERM_DATA:
-    console.log(action.payload)
     action.payload.map(items => {
       items.dateStarted = format(items.dateStarted);
       items.closingDate = format(items.closingDate)
