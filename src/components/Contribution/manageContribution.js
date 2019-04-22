@@ -239,6 +239,7 @@ class ManageContribution extends Component {
           toggle={this.toggle}
           contributionInfo={modalContribution}
           onSubmit={this.handleSubmit}
+          term={this.props.term}
         />
 
         <Table data={dataPagination} columns={this.columns} />

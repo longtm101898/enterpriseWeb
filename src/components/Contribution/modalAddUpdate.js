@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import FormField from "../utils/Form/formField";
 import Dropzone from "react-dropzone";
-import { connect } from "react-redux";
 import {
   update,
   generateData,
@@ -14,6 +13,7 @@ import ewApi from "../../axios-ew";
 
 class ModelAddUpdate extends Component {
   state = {
+    term: [],
     word: "",
     img: "",
     formError: false,
@@ -54,12 +54,17 @@ class ModelAddUpdate extends Component {
     },
     disableButton: true
   };
+  
   componentWillReceiveProps(nextProps) {
+    if(nextProps.term.length !==0){
+      this.setState({term: nextProps.term.data});
+    }
     if (nextProps.contributionInfo !== "") {
       var conForm = populateFields(
         this.state.formData,
         nextProps.contributionInfo
       );
+      
       this.setState({
         formData: conForm,
         conId: nextProps.contributionInfo.id
@@ -71,6 +76,7 @@ class ModelAddUpdate extends Component {
   }
 
   componentDidMount() {
+  
     this.setState({
       modal: this.props.show
     });
@@ -112,9 +118,10 @@ class ModelAddUpdate extends Component {
       let formData = new FormData();
       formData.append("files", acceptedFiles[0], acceptedFiles[0].name);
       // var fileData = File(acceptedFiles[0])
-      ewApi.post("upload", formData).then(res => {
+     var term = this.state.term[this.state.term.length - 1];
+      ewApi.post(`upload?termName=${term.name}&startDate=${term.dateStarted}&closingDate=${term.closingDate}`, formData).then(res => {
         if (ext === ".docx" || ext === ".doc") {
-			console.log('word')
+
           this.setState({ word: res.data });
         }
         if (ext === ".jpg" || ext === ".jpeg" || ext === ".png") {
@@ -143,11 +150,11 @@ class ModelAddUpdate extends Component {
       padding: "54px 54px"
     };
     const { disableButton } = this.state;
-
+    console.log(this.state.term[this.state.term.length - 1])
     return (
       <div style={{ margin: "0 auto" }}>
         <Modal isOpen={this.props.show} className="modal-lg">
-          <ModalHeader>Student Submit & Update Form</ModalHeader>
+          <ModalHeader toggle={this.props.toggle}>Student Submit & Update Form</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
               <label>Title:</label>
@@ -251,10 +258,5 @@ class ModelAddUpdate extends Component {
     );
   }
 }
-const mapStateToProps = state => {
-  return { term: state.term };
-};
-export default connect(
-  mapStateToProps,
-  null
-)(ModelAddUpdate);
+
+export default ModelAddUpdate
