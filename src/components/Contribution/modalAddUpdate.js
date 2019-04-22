@@ -56,8 +56,8 @@ class ModelAddUpdate extends Component {
   };
   
   componentWillReceiveProps(nextProps) {
-    if(nextProps.term.length !==0){
-      this.setState({term: nextProps.term.data});
+    if(nextProps.term !== null){
+      this.setState({term: nextProps.term});
     }
     if (nextProps.contributionInfo !== "") {
       var conForm = populateFields(
@@ -118,7 +118,7 @@ class ModelAddUpdate extends Component {
       let formData = new FormData();
       formData.append("files", acceptedFiles[0], acceptedFiles[0].name);
       // var fileData = File(acceptedFiles[0])
-     var term = this.state.term[this.state.term.length - 1];
+     var term = this.state.term;
       ewApi.post(`upload?termName=${term.name}&startDate=${term.dateStarted}&closingDate=${term.closingDate}`, formData).then(res => {
         if (ext === ".docx" || ext === ".doc") {
 
@@ -150,7 +150,7 @@ class ModelAddUpdate extends Component {
       padding: "54px 54px"
     };
     const { disableButton } = this.state;
-    console.log(this.state.term[this.state.term.length - 1])
+    console.log(this.state.term)
     return (
       <div style={{ margin: "0 auto" }}>
         <Modal isOpen={this.props.show} className="modal-lg">
@@ -227,16 +227,18 @@ class ModelAddUpdate extends Component {
                 />
                 <label>I agree to the Terms and Conditions</label>
                 <div>
-                      <p>Student contributions must be in word format and be smaller than 1 MB
-                    Images submitted by students must have high image quality such as photograph, ...<br></br>
-                    Images must be carefully reviewed before uploading.<br></br>
-                    Images must not contain violent and sexy information.<br></br>
-                    Images uploaded by students must be smaller than 20 MB.<br></br>
-                    Students can upload contributions within 45 days from the start of each term to the closure date.<br></br>
-                    Students can edit contributions for 2 months from the start of each term to the final closure date.<br></br>
-                    Students can upload many contributions. Each contribution can only be uploaded to one-word file and one image file.<br></br>
-                    The approved contributions by marketing coordinator will not be updated anymore.<br></br>
-                    Students should read the term and condition carefully before submitting.</p>
+                  <ul>
+                    <li>Student contributions must be in word format and be smaller than 1 MB
+                    Images submitted by students must have high image quality such as photograph, ...</li>
+                    <li>Images must be carefully reviewed before uploading.</li> 
+                    <li>Images must not contain violent and sexy information.</li> 
+                    <li>Images uploaded by students must be smaller than 20 MB.</li> 
+                    <li> Students can upload contributions within 45 days from the start of each term to the closure date.</li> 
+                    <li> Students can edit contributions for 2 months from the start of each term to the final closure date.</li> 
+                    <li> Students can upload many contributions. Each contribution can only be uploaded to one-word file and one image file.</li> 
+                    <li>The approved contributions by marketing coordinator will not be updated anymore.</li> 
+                    <li>Students should read the term and condition carefully before submitting.</li> 
+                  </ul>
                   </div>
               </div>
             </form>

@@ -57,7 +57,7 @@ class ManageRole extends Component {
   };
 
   handleSubmit = (role, roleId) => {
-    if(roleId === ""){
+    if(roleId == ""){
       this.props.dispatch(postData(role)).then(res => this.props.dispatch(getRoleData()));
     }
     else{

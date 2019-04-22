@@ -1,16 +1,16 @@
-import { GET_TERM_DATA } from "../actions/types";
+import { GET_TERM_DATA, GET_CURRENT_TERM } from "../actions/types";
 
 const initialState = {
-  data: []
+  data: [],
+  curterm: null
 };
 function format(inputDate) {
   var date = new Date(inputDate);
   if (!isNaN(date.getTime())) {
       // Months use 0 index.
-      return date.getFullYear() + '-' + ("0" + (date.getMonth() + 1)).slice(-2) + '-' + date.getDate()   ;
+      return date.getFullYear() + '-' + ("0" + (date.getMonth() + 1)).slice(-2) + '-' + ("0" + (date.getDate())).slice(-2);
   }
 }
-
 
 export default function(state = initialState, action) {
   switch (action.type) {
@@ -23,6 +23,11 @@ export default function(state = initialState, action) {
         ...state,
         data: action.payload
       };
+      case GET_CURRENT_TERM:
+      return{
+        ...state,
+        curterm: action.payload
+      }
     default:
       return state;
   }

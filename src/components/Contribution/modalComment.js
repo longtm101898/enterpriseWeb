@@ -110,7 +110,7 @@ class ModalComment extends Component {
     return (
       <div style={{ margin: "0 auto" }}>
         <Modal isOpen={this.props.show} className="modal-lg">
-          <ModalHeader>Student Submit & Update Form</ModalHeader>
+          <ModalHeader>Student Comment Form</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
               <label>Title: </label>

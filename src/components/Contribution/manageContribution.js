@@ -8,7 +8,7 @@ import {
   postContribution,
   postCommentContribution
 } from "../../actions/contribution_actions";
-import { getTermData } from "../../actions/term_actions";
+import { getCurrentTerm } from "../../actions/term_actions";
 import ModalAddUpdate from "./modalAddUpdate";
 import ModalComment from "./modalComment";
 import Pagination from "../utils/pagination";
@@ -63,11 +63,20 @@ class ManageContribution extends Component {
           >
             <i className="fa fa-comment" />
           </button>
+          <button
+           onClick={() => this.handleDownload(con)}
+           className="btn btn-success btn-sm">
+            <i className="fa fa-download" />
+          </button>
+
         </React.Fragment>
       )
     }
   ];
 
+  handleDownload(con){
+    console.log("download")
+  }
   handleComment(con) {
     this.setState({
       modalComment: !this.state.modalComment,
@@ -123,16 +132,25 @@ class ManageContribution extends Component {
   }
 
   componentWillMount = async () => {
-    await this.props.dispatch(getTermData());
-    this.setState({
-      term: this.props.term.data[this.props.term.data.length - 1]
-    });
-    var d1 = new Date(this.state.term.closingDate);
-    var d2 = new Date();
-    d1.setDate(d1.getDate() - 15);
-    this.setState({
-      disbaledAdd: d2 < d1 ? true : false
-    });
+    await this.props.dispatch(getCurrentTerm());
+    if(this.props.term.curterm !== ""){
+      this.setState({
+        term: this.props.term.curterm
+      });
+      var d1 = new Date(this.state.term.closingDate);
+      var d2 = new Date();
+      d1.setDate(d1.getDate() - 15);
+      this.setState({
+        disbaledAdd: d2 < d1 ? true : false
+      });
+    }
+    else{
+      window.alert("You can't submit contribution now!!");
+      this.setState({
+        disbaledAdd: false
+      });
+    }
+    
   };
 
   componentDidMount = async () => {
@@ -239,7 +257,7 @@ class ManageContribution extends Component {
           toggle={this.toggle}
           contributionInfo={modalContribution}
           onSubmit={this.handleSubmit}
-          term={this.props.term}
+          term={this.props.term.curterm}
         />
 
         <Table data={dataPagination} columns={this.columns} />

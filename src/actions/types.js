@@ -21,3 +21,4 @@ export const GET_CONTRIBUTION_DATA = "GET_CONTRIBUTION_DATA";
 
 //Term
 export const GET_TERM_DATA = "GET_TERM_DATA";
+export const GET_CURRENT_TERM = "GET_CURRENT_TERM";

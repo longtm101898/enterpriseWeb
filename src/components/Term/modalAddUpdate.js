@@ -98,11 +98,13 @@ class ModelAddUpdate extends Component {
                     <ModalHeader>Add & Update Term</ModalHeader>
                     <ModalBody>
                         <form onSubmit={e => this.submitForm(e)}>
+                        <label>Name:</label>
                         <FormField
                         id="name"
                         formdata={this.state.formData.name}
                         change={e => this.updateForm(e)}
                     />
+                     <label>Date Started:</label>
                     <FormField
                         id="dateStarted"
                         formdata={this.state.formData.dateStarted}

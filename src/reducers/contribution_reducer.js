@@ -15,7 +15,8 @@ export default function(state = initialState, action) {
   switch (action.type) {
     case GET_CONTRIBUTION_DATA:
     action.payload.map(items => {
-      items.periodEdited = format(items.periodEdited)
+      items.periodEdited = format(items.periodEdited);
+      items.dateCreated = format(items.dateCreated)
     })
       return {
         ...state,

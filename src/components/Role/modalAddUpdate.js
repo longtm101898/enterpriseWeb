@@ -84,7 +84,7 @@ class ModalAddUpdate extends Component {
         console.log("update")
         this.props.onSubmit(dataToSubmit, this.state.roleId);
       }else{
-        this.props.onSubmit(dataToSubmit);
+        this.props.onSubmit(dataToSubmit,"");
       }
       // this.props.onSubmitForm(dataToSubmit);
     } else {
@@ -102,11 +102,13 @@ class ModalAddUpdate extends Component {
           <ModalHeader>Role add</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
+            <label>Name:</label>
               <FormField
                 id={"name"}
                 formdata={this.state.formData.name}
                 change={element => this.updateForm(element)}
               />
+               <label>Description:</label>
               <FormField
                 id={"description"}
                 formdata={this.state.formData.description}

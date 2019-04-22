@@ -131,7 +131,7 @@ class userProfile extends Component {
 			<div className="container text-left" style={{marginLeft: '25px'}}>
 				<div className="row m-y-2">
 					<div className="col-lg-4 pull-lg-8 text-xs-center">
-						<label for="file-input">
+						<label htmlFor="file-input">
 						<img src="//placehold.it/200" className="m-x-auto img-fluid img-circle" alt="avatar" />
 						</label>		
 						<input type="file" id="file-input" style={{display: "none"}} />

@@ -99,11 +99,13 @@ class ModalAddUpdate extends Component {
           <ModalHeader>Faculties add & update</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
+              <label>Name:</label>
               <FormField
                 id={"name"}
                 formdata={this.state.formData.name}
                 change={element => this.updateForm(element)}
               />
+               <label>Description:</label>
               <FormField
                 id={"description"}
                 formdata={this.state.formData.description}

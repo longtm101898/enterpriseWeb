@@ -14,13 +14,13 @@ export const getRoleData = () => async dispatch => {
 
 export const postData = (role) => async dispatch =>{
   await ewApi
-  .post("approle", role)
+  .post("approle/save", role)
   .then(res =>console.log(res));
 };
 
 export const putData = (role, roleId) => async dispatch =>{
   await ewApi
-  .put("approle/" + roleId, role)
+  .put("approle?roleId=" + roleId, role)
   .then(res => console.log(res));
 };
 

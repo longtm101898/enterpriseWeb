@@ -234,26 +234,31 @@ class modalAddUpdate extends Component {
           <ModalHeader>User add & update</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
+            <label>Full name:</label>
               <FormField
                 id={"fullName"}
                 formdata={this.state.formData.fullName}
                 change={element => this.updateForm(element)}
               />
+               <label>Email:</label>
               <FormField
                 id={"email"}
                 formdata={this.state.formData.email}
                 change={element => this.updateForm(element)}
               />
+               <label>Password:</label>
               <FormField
                 id={"password"}
                 formdata={this.state.formData.password}
                 change={element => this.updateForm(element)}
               />
+               <label>Phone Number:</label>
               <FormField
                 id={"phoneNumber"}
                 formdata={this.state.formData.phoneNumber}
                 change={element => this.updateForm(element)}
               />
+               <label>Avatar:</label>
               <Dropzone onDrop={this.handleFile} accept="image/*">
                             {({ getRootProps, getInputProps, acceptedFiles }) => (
                               <section>
@@ -274,16 +279,19 @@ class modalAddUpdate extends Component {
                               </section>
                             )}
                             </Dropzone>
+              <label>Status:</label>
               <FormField
                 id={"status"}
                 formdata={this.state.formData.status}
                 change={element => this.updateForm(element)}
               />
+               <label>Role:</label>
               <FormField
                 id={"roles"}
                 formdata={this.state.formData.roles}
                 change={element => this.updateForm(element)}
               />
+               <label>Faculties:</label>
               <FormField
                 id={"facultiesId"}
                 formdata={this.state.formData.facultiesId}
