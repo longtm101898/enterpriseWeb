@@ -137,7 +137,7 @@ class modalAddUpdate extends Component {
     console.log(nextProps);
     if (nextProps.userInfo !== "") {
       for (var i = 0; i < this.props.roles.data.length; i++) {
-        if (this.props.roles.data[i].name == nextProps.userInfo.roles[0]) {
+        if (this.props.roles.data[i].name === nextProps.userInfo.roles[0]) {
           nextProps.userInfo.roles = this.props.roles.data[i].id
         }
       }
@@ -180,7 +180,7 @@ class modalAddUpdate extends Component {
     let dataToSubmit = generateData(this.state.formData, "user");
     let formIsValid = isFormValid(this.state.formData, "user");
     for (var i = 0; i < this.props.roles.data.length; i++) {
-      if (this.props.roles.data[i].id == dataToSubmit.roles) {
+      if (this.props.roles.data[i].id === dataToSubmit.roles) {
         dataToSubmit.roles = [this.props.roles.data[i].name]
       }
     }
@@ -199,7 +199,7 @@ class modalAddUpdate extends Component {
     }
   };
   handleFile = (acceptedFiles) => {
-    if (acceptedFiles.length != 0) {
+    if (acceptedFiles.length !== 0) {
       var ext = acceptedFiles[0].name.substring(
         acceptedFiles[0].name.lastIndexOf(".")
       );

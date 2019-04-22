@@ -130,8 +130,6 @@ class ManageContribution extends Component {
     var d1 = new Date(this.state.term.closingDate);
     var d2 = new Date();
     d1.setDate(d1.getDate() - 15);
-    console.log(d1);
-    console.log(d2);
     this.setState({
       disbaledAdd: d2 < d1 ? true : false
     });
@@ -204,7 +202,7 @@ class ManageContribution extends Component {
       disbaledAdd,
       modalComment
     } = this.state;
-    const { data: dataPagination, itemsCount: itemsCount } = this.getData();
+    const { data: dataPagination, itemsCount } = this.getData();
     return (
       <div style={{ marginLeft: "50px" }}>
         <h1 className="h3 mb-2 text-gray-800 text-center">Manage Contribution</h1>
@@ -225,7 +223,7 @@ class ManageContribution extends Component {
             >
               Add new Contribution
             </button>
-            {disbaledAdd == false ? <div className='collapse' id='collapseExample'> <div className='card card-body'>The Term is out of date</div></div>
+            {disbaledAdd === false ? <div className='collapse' id='collapseExample'> <div className='card card-body'>The Term is out of date</div></div>
               : ""}
            
           </div>

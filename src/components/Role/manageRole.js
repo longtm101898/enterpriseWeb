@@ -117,7 +117,7 @@ class ManageRole extends Component {
       modalRole,
       modalShow
     } = this.state;
-    const { data: dataPagination, itemsCount: itemsCount } = this.getData();
+    const { data: dataPagination, itemsCount } = this.getData();
     return (
       <div style={{ marginLeft: "50px" }}>
        <h1 className="h3 mb-2 text-gray-800 text-center">Manage Role</h1>

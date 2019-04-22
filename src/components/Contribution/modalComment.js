@@ -23,8 +23,7 @@ class ModalComment extends Component {
           type: "text",
           placeholder: "Enter Contribution Comment"
         },
-        validation: {
-        },
+        validation: {},
         valid: false,
         touched: false,
         validationMessage: ""
@@ -36,17 +35,16 @@ class ModalComment extends Component {
           className: "form-control form-control-user",
           name: "facultiesId_input",
           options: [
-            { "key": 0, "value": "Waiting" },
-            { "key": 1, "value": "Cancel" },
-            { "key": 2, "value": "published" }
-          ],
+            { key: 0, value: "Waiting" },
+            { key: 1, value: "Cancel" },
+            { key: 2, value: "published" }
+          ]
         },
-        validation: {
-        },
+        validation: {},
         valid: false,
         touched: false,
         validationMessage: ""
-      },
+      }
     },
     title: "",
     description: "",
@@ -67,7 +65,7 @@ class ModalComment extends Component {
         description: nextProps.contributionInfo.description,
         fileURL: nextProps.contributionInfo.fileURL,
         imageURL: nextProps.contributionInfo.imageURL,
-        dateCreated: nextProps.contributionInfo.dateCreated,
+        dateCreated: nextProps.contributionInfo.dateCreated
       });
     } else {
       var conRs = resetFields(this.state.formData);
@@ -93,8 +91,12 @@ class ModalComment extends Component {
     e.preventDefault();
     let dataToSubmit = generateData(this.state.formData, "con");
     let formIsValid = isFormValid(this.state.formData, "con");
-    if (formIsValid) {      
-        this.props.onSubmit(this.state.conId, dataToSubmit.comment, dataToSubmit.status);
+    if (formIsValid) {
+      this.props.onSubmit(
+        this.state.conId,
+        dataToSubmit.comment,
+        dataToSubmit.status
+      );
       this.props.toggle();
     } else {
       this.setState({
@@ -104,7 +106,7 @@ class ModalComment extends Component {
   };
 
   render() {
-      const {title, description, fileURL, imageURL, dateCreated} = this.state;
+    const { title, description, fileURL, imageURL, dateCreated } = this.state;
     return (
       <div style={{ margin: "0 auto" }}>
         <Modal isOpen={this.props.show} className="modal-lg">
@@ -112,22 +114,29 @@ class ModalComment extends Component {
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
               <label>Title: </label>
-            <p>{title}</p>
-            <label>Description:</label>
-            <p>{description}</p>
-            <label>File Word: </label>
-            <p>{fileURL}</p>
-            <label>File Image:</label>
-            <p>{imageURL}</p>
-            <label>Date Created:</label>
-            <p>{dateCreated}</p>
+              <p>{title}</p>
+              <label>Description:</label>
+              <p>{description}</p>
+              <label>File Word: </label>
+              <a href={"http://localhost:49763/" + fileURL}> {title}</a>
+              <br />
+              <label>File Image:</label>
+              <img
+                width="200"
+                height="300"
+                src={"http://localhost:49763/" + imageURL}
+                alt={title}
+              />
+              <br />
+              <label>Date Created:</label>
+              <p>{dateCreated}</p>
               <label>Comment: </label>
               <FormField
                 id="comment"
                 formdata={this.state.formData.comment}
                 change={e => this.updateForm(e)}
               />
-               <label>Status:</label>
+              <label>Status:</label>
               <FormField
                 id="status"
                 formdata={this.state.formData.status}
@@ -136,10 +145,7 @@ class ModalComment extends Component {
             </form>
           </ModalBody>
           <ModalFooter>
-            <Button
-              color="primary"
-              onClick={e => this.submitForm(e)}
-            >
+            <Button color="primary" onClick={e => this.submitForm(e)}>
               Submit
             </Button>
             <Button color="danger" onClick={this.props.toggle}>

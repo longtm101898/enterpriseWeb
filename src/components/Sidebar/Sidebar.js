@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { withRouter, Link } from "react-router-dom";
 import cwApi from "../../axios-ew";
 import SideNav, {
@@ -69,8 +68,8 @@ class Sidebar extends React.Component {
             <NavTitle>COMP1640</NavTitle>
             <NavSubTitle>Contribution management</NavSubTitle>
           </NavHeader>
-          <Nav defaultSelected="home">
-            <NavItem eventKey="home">
+          <Nav defaultSelected="">
+            <NavItem eventKey="">
               <NavIcon>
                 <i
                   className="fa fa-fw fa-home"

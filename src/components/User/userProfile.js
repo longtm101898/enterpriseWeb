@@ -7,7 +7,6 @@ import {
     update,
     generateData,
     isFormValid,
-    resetFields,
     populateFields
   } from "../utils/Form/formAction";
 
@@ -140,7 +139,7 @@ class userProfile extends Component {
 					<div className="col-lg-8 push-lg-4">
 							<div className="tab-pane" id="edit">
 								<h4 className="m-y-2">Edit Profile</h4>
-								<form role="form">
+								<form>
 								<label>Fullname:</label>
 									<FormField
 										id="fullName"

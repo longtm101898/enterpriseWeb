@@ -113,6 +113,7 @@ class Header extends Component {
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
+                href=""
               >
                 <span className="mr-2 d-none d-lg-inline text-gray-600 small">
                   {user ? user.fullName : "Loading..."}
@@ -120,6 +121,7 @@ class Header extends Component {
                 <img
                   className="img-profile rounded-circle"
                   src="https://source.unsplash.com/QAB-WJcbgJk/60x60"
+                  alt="img"
                 />
               </a>
               {/* Dropdown - User Information */}
@@ -131,14 +133,6 @@ class Header extends Component {
                   <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400" />
                   Profile
                 </Link>
-                <a className="dropdown-item">
-                  <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400" />
-                  Settings
-                </a>
-                <a className="dropdown-item">
-                  <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400" />
-                  Activity Log
-                </a>
                 <div className="dropdown-divider" />
                 <a
                   className="dropdown-item"

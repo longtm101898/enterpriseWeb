@@ -5,7 +5,7 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class Dashboard extends Component {
   state = {
-    options: {
+    options1: {
       theme: "dark1",
       animationEnabled: true,
       exportFileName: "New Year Resolutions",
@@ -14,18 +14,21 @@ class Dashboard extends Component {
         text: "Number of contributions within each Faculty"
       },
       data: []
+    },
+    options2: {
+      theme: "light1",
+      animationEnabled: true,
+      exportFileName: "New Year Resolutions",
+      exportEnabled: true,
+      title: {
+        text: "Number of contributors within each Faculty"
+      },
+      data: []
     }
   };
   componentDidMount() {
     ewApi.get("chart/numberofcontribution").then(res => {
-      for (var i = 0; i < res.data.length; i++) {
-        res.data[i]["label"] = res.data[i].facultiesName;
-        res.data[i]["y"] = res.data[i].contributionQuantity;
-        delete res.data[i].facultiesName;
-        delete res.data[i].contributorQuantity;
-        delete res.data[i].contributionQuantity;
-        delete res.data[i].contributionPercentage;
-      }
+      var popData = this.populateDataOpt1(res);
       var data = [
         {
           type: "pie",
@@ -34,20 +37,74 @@ class Dashboard extends Component {
           toolTipContent: "{label}: <strong>{y}%</strong>",
           indexLabel: "{y}",
           indexLabelPlacement: "inside",
-          dataPoints: res.data
+          dataPoints: popData
         }
       ];
-      var newData = { ...this.state.options, data };
-      this.setState({ options: newData });
+      var newData = { ...this.state.options1, data };
+      this.setState({ options1: newData });
+    });
+    ewApi.get("chart/numberofcontributor").then(res => {
+      var popData = this.populateDataOpt2(res);
+      var data = [
+        {
+          type: "column",
+          showInLegend: true,
+          legendText: "{label}",
+          toolTipContent: "{label}: <strong>{y}%</strong>",
+          indexLabel: "{y}",
+          indexLabelPlacement: "inside",
+          dataPoints: popData
+        }
+      ];
+      var newData = { ...this.state.options2, data };
+      console.log(popData);
+      this.setState({ options2: newData });
     });
   }
+
+  populateDataOpt1 = res => {
+    for (var i = 0; i < res.data.length; i++) {
+      res.data[i]["label"] = res.data[i].facultiesName;
+      res.data[i]["y"] = res.data[i].contributionQuantity;
+      delete res.data[i].facultiesName;
+      delete res.data[i].contributorQuantity;
+      delete res.data[i].contributionQuantity;
+      delete res.data[i].contributionPercentage;
+    }
+    return res.data;
+  };
+  populateDataOpt2 = res => {
+    for (var i = 0; i < res.data.length; i++) {
+      res.data[i]["label"] = res.data[i].facultiesName;
+      res.data[i]["y"] = res.data[i].contributorQuantity;
+      delete res.data[i].facultiesName;
+      delete res.data[i].contributorQuantity;
+      delete res.data[i].contributionQuantity;
+      delete res.data[i].contributionPercentage;
+    }
+    return res.data;
+  };
   render() {
     return (
-      <div style={{ marginLeft: "50px" }}>
-        <h1>Statistic</h1>
-        <CanvasJSChart
-          options={this.state.options}
-        />
+      <div style={{ marginLeft: "80px" }}>
+        <div className="row">
+          <div className="col-xl-6 col-lg-6">
+            <div className="card shadow mb-4">
+              <div className="card-header py-3">
+                <h2>Statistic</h2>
+              </div>
+              <CanvasJSChart options={this.state.options1} />
+            </div>
+          </div>
+          <div className="col-xl-5 col-lg-6">
+            <div className="card shadow mb-4">
+              <div className="card-header py-3">
+                <h2>Statistic</h2>
+              </div>
+              <CanvasJSChart options={this.state.options2} />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
