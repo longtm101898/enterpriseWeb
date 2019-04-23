@@ -14,6 +14,7 @@ import ModalAddUpdate from "./modalAddUpdate";
 import ModalComment from "./modalComment";
 import Pagination from "../utils/pagination";
 import { getCurrentUser } from "../../services/authService";
+import ModalDownload from "./modalDownload";
 
 class ManageContribution extends Component {
   state = {
@@ -22,7 +23,8 @@ class ManageContribution extends Component {
     searchQuery: "",
     modalShow: false,
     modalContribution: "",
-    modalComment: false
+    modalComment: false,
+    modalDownloadShow: false
   };
 
   columns = [
@@ -71,7 +73,7 @@ class ManageContribution extends Component {
   ];
 
   handleDownload(con) {
-    console.log("download");
+    this.setState({modalDownloadShow: !this.state.modalDownloadShow})
   }
   async handleComment(con) {
     await this.props.dispatch(getContributionById(con.id));
@@ -177,7 +179,9 @@ class ManageContribution extends Component {
       });
     }
   };
-
+  toggleDownload = () => {
+    this.setState({modalDownloadShow: !this.state.modalDownloadShow})
+  }
   toggleComment = () => {
     this.setState({
       modalComment: !this.state.modalComment,
@@ -215,6 +219,7 @@ class ManageContribution extends Component {
       pageSize,
       currentPage,
       modalContribution,
+      modalDownloadShow,
       modalShow,
       disbaledAdd,
       modalComment
@@ -258,6 +263,7 @@ class ManageContribution extends Component {
           onSubmit={this.handleSubmit}
           term={this.props.term.curterm}
         />
+        <ModalDownload show={modalDownloadShow} toggle={this.toggleDownload} />
 
         <Table data={dataPagination} columns={this.columns} />
         <div className="row justify-content-start">
