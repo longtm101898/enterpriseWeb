@@ -134,7 +134,6 @@ class modalAddUpdate extends Component {
     }
   };
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     if (nextProps.userInfo !== "") {
       for (var i = 0; i < this.props.roles.data.length; i++) {
         if (this.props.roles.data[i].name === nextProps.userInfo.roles[0]) {
@@ -164,7 +163,6 @@ class modalAddUpdate extends Component {
     this.setState({
       formData: newfacultiesId
     })
-    console.log(this.props.faculties.data)
 
   }
 

@@ -9,7 +9,7 @@ import {
   postCommentContribution,
   getContributionById
 } from "../../actions/contribution_actions";
-import { getCurrentTerm } from "../../actions/term_actions";
+import { getCurrentTerm, getOutdatedTerm } from "../../actions/term_actions";
 import ModalAddUpdate from "./modalAddUpdate";
 import ModalComment from "./modalComment";
 import Pagination from "../utils/pagination";
@@ -24,7 +24,8 @@ class ManageContribution extends Component {
     modalShow: false,
     modalContribution: "",
     modalComment: false,
-    modalDownloadShow: false
+    modalDownloadShow: false,
+    modalDownloadData: ""
   };
 
   columns = [
@@ -72,8 +73,12 @@ class ManageContribution extends Component {
     }
   ];
 
-  handleDownload(con) {
-    this.setState({modalDownloadShow: !this.state.modalDownloadShow})
+  handleDownload = async () => {
+    await this.props.dispatch(getOutdatedTerm());
+    this.setState({
+      modalDownloadShow: !this.state.modalDownloadShow,
+      modalDownloadData: this.props.term.outDatedTerm
+    });
   }
   async handleComment(con) {
     await this.props.dispatch(getContributionById(con.id));
@@ -180,8 +185,8 @@ class ManageContribution extends Component {
     }
   };
   toggleDownload = () => {
-    this.setState({modalDownloadShow: !this.state.modalDownloadShow})
-  }
+    this.setState({ modalDownloadShow: !this.state.modalDownloadShow });
+  };
   toggleComment = () => {
     this.setState({
       modalComment: !this.state.modalComment,
@@ -220,6 +225,7 @@ class ManageContribution extends Component {
       currentPage,
       modalContribution,
       modalDownloadShow,
+      modalDownloadData,
       modalShow,
       disbaledAdd,
       modalComment
@@ -263,11 +269,14 @@ class ManageContribution extends Component {
           onSubmit={this.handleSubmit}
           term={this.props.term.curterm}
         />
-        <ModalDownload show={modalDownloadShow} toggle={this.toggleDownload} />
+        <ModalDownload
+          show={modalDownloadShow}
+          toggle={this.toggleDownload}
+          term={modalDownloadData}
+        />
 
         <Table data={dataPagination} columns={this.columns} />
         <div className="row justify-content-start">
-          
           <div className="col-4">
             <Pagination
               itemsCount={itemsCount}
@@ -278,7 +287,7 @@ class ManageContribution extends Component {
           </div>
           <div className="col-4">
             <button
-              onClick={() => this.handleDownload()}
+              onClick={this.handleDownload}
               className="btn btn-success btn-sm"
             >
               <i className="fa fa-download" style={{ marginRight: 5 }} />

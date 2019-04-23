@@ -66,7 +66,6 @@ class ManageUser extends Component {
     }
     async showUpdateForm(user) {
         await this.props.dispatch(getUserDataById(user.id));
-        console.log(this.props.user)
         this.setState({
             modalShow: !this.state.modalShow,
             modalUser: this.props.user,

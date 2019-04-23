@@ -1,9 +1,10 @@
-import { GET_TERM_DATA, GET_CURRENT_TERM} from "../actions/types";
+import { GET_TERM_DATA, GET_CURRENT_TERM, GET_OUTDATED_TERM} from "../actions/types";
 
 const initialState = {
   data: [],
   dataById: null,
-  curterm: null
+  curterm: null,
+  outDatedTerm: []
 };
 function format(inputDate) {
   var date = new Date(inputDate);
@@ -29,7 +30,11 @@ export default function(state = initialState, action) {
         ...state,
         curterm: action.payload
       }
-  
+      case GET_OUTDATED_TERM:
+      return {
+        ...state,
+        outDatedTerm: action.payload
+      }
     default:
       return state;
   }

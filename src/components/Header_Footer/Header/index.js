@@ -29,7 +29,7 @@ class Header extends Component {
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
-                href=""
+                href="javascript:void(0)"
               >
                 <span className="mr-2 d-none d-lg-inline text-gray-600 small">
                   {user ? user.fullName : "Loading..."}
@@ -55,6 +55,7 @@ class Header extends Component {
                   data-toggle="modal"
                   data-target="#logoutModal"
                   onClick={this.handleLogout}
+                  href="javascript:void(0)"
                 >
                   <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" />
                   Logout

@@ -1,5 +1,4 @@
 export function getFormattedDate(date){
-    console.log(date)
   var year = date.getFullYear();
 
   var month = (1 + date.getMonth()).toString();
