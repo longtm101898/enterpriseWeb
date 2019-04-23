@@ -234,8 +234,8 @@ class ModelAddUpdate extends Component {
                   id="termandcondition"
                   name="termandcondition"
                   onChange={this.handleChange}
-                />
-                <label>I agree to the Terms and Conditions</label>
+                ></input>
+                <label for="termandcondition">I agree to the Terms and Conditions</label>
                 <div>
                   <ul>
                     <li>
@@ -250,18 +250,15 @@ class ModelAddUpdate extends Component {
                     <li>
                       Images uploaded by students must be smaller than 20 MB.
                     </li>
-                    <li>
-                      {" "}
+                    <li>                   
                       Students can upload contributions within 45 days from the
                       start of each term to the closure date.
                     </li>
-                    <li>
-                      {" "}
+                    <li>                   
                       Students can edit contributions for 2 months from the
                       start of each term to the final closure date.
                     </li>
                     <li>
-                      {" "}
                       Students can upload many contributions. Each contribution
                       can only be uploaded to one-word file and one image file.
                     </li>

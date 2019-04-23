@@ -105,8 +105,8 @@ class Sidebar extends React.Component {
                   </NavItem>
                 );
               }
+              return null;
             })}
-            {/* </NavItem> */}
           </Nav>
         </SideNav>
       </ClickOutside>

@@ -83,8 +83,8 @@ class ManageContribution extends Component {
     });
   }
 
-  handleDisabled(con) {
-    var d1 = new Date(con.closingDate);
+  handleDisabled(term) {
+    var d1 = new Date(term.closingDate);
     var d2 = new Date();
     return d2 > d1 ? true : false;
   }
@@ -267,6 +267,15 @@ class ManageContribution extends Component {
 
         <Table data={dataPagination} columns={this.columns} />
         <div className="row justify-content-start">
+          
+          <div className="col-4">
+            <Pagination
+              itemsCount={itemsCount}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={this.handlePageChange}
+            />
+          </div>
           <div className="col-4">
             <button
               onClick={() => this.handleDownload()}
@@ -275,14 +284,6 @@ class ManageContribution extends Component {
               <i className="fa fa-download" style={{ marginRight: 5 }} />
               Download by term
             </button>
-          </div>
-          <div className="col-4">
-            <Pagination
-              itemsCount={itemsCount}
-              pageSize={pageSize}
-              currentPage={currentPage}
-              onPageChange={this.handlePageChange}
-            />
           </div>
         </div>
       </div>

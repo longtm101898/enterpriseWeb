@@ -15,6 +15,7 @@ class ModalDownload extends Component {
           isOpen={this.props.show}
           className="modal-lg"
           toggle={this.props.toggle}
+          centered
         >
           <ModalHeader toggle={this.props.toggle}>Download by Term</ModalHeader>
           <ModalBody>GetTerm Outdated to download</ModalBody>

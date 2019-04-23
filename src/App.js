@@ -2,13 +2,12 @@ import React, { Component } from "react";
 import Layout from "./hoc/layout";
 import { Switch, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Login from "./components/Register_Login/Login";
 import ManageRole from "./components/Role/manageRole";
 import ManageFaculties from "./components/Faculties/manageFaculties";
-import ManageFunction from "./components/Function/manageFunction";
 import ManageContribution from "./components/Contribution/manageContribution";
 import ManageTerm from "./components/Term/manageTerm";
-import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./components/dashboard";
 import ProtectedRoute from "./shared/protectedRoute";
 import ManageUser from "./components/User/manageUser";
@@ -28,7 +27,6 @@ class App extends Component {
             exact
             component={ManageFaculties}
           />
-          <ProtectedRoute path="/function" component={ManageFunction} />
           <ProtectedRoute
             path="/contribution/view"
             exact
