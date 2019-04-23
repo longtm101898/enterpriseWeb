@@ -10,6 +10,7 @@ import {
 } from "../utils/Form/formAction";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import ewApi from "../../axios-ew";
+import { getFormattedDate } from "../../shared/utility";
 
 class ModelAddUpdate extends Component {
   state = {
@@ -54,17 +55,17 @@ class ModelAddUpdate extends Component {
     },
     disableButton: true
   };
-  
+
   componentWillReceiveProps(nextProps) {
-    if(nextProps.term !== null){
-      this.setState({term: nextProps.term});
+    if (nextProps.term !== null) {
+      this.setState({ term: nextProps.term });
     }
     if (nextProps.contributionInfo !== "") {
       var conForm = populateFields(
         this.state.formData,
         nextProps.contributionInfo
       );
-      
+
       this.setState({
         formData: conForm,
         conId: nextProps.contributionInfo.id
@@ -76,7 +77,6 @@ class ModelAddUpdate extends Component {
   }
 
   componentDidMount() {
-  
     this.setState({
       modal: this.props.show
     });
@@ -118,16 +118,24 @@ class ModelAddUpdate extends Component {
       let formData = new FormData();
       formData.append("files", acceptedFiles[0], acceptedFiles[0].name);
       // var fileData = File(acceptedFiles[0])
-     var term = this.state.term;
-      ewApi.post(`upload?termName=${term.name}&startDate=${term.dateStarted}&closingDate=${term.closingDate}`, formData).then(res => {
-        if (ext === ".docx" || ext === ".doc") {
-
-          this.setState({ word: res.data });
-        }
-        if (ext === ".jpg" || ext === ".jpeg" || ext === ".png") {
-          this.setState({ img: res.data });
-        }
-      });
+      var { term } = this.state;
+      var dateStarted = getFormattedDate(new Date(term.dateStarted));
+      var closingDate = getFormattedDate(new Date(term.closingDate));
+      ewApi
+        .post(
+          `upload?termName=${
+            term.name
+          }&startDate=${dateStarted}&closingDate=${closingDate}`,
+          formData
+        )
+        .then(res => {
+          if (ext === ".docx" || ext === ".doc") {
+            this.setState({ word: res.data });
+          }
+          if (ext === ".jpg" || ext === ".jpeg" || ext === ".png") {
+            this.setState({ img: res.data });
+          }
+        });
     } else {
       alert("The file is invalid !!!");
     }
@@ -150,11 +158,13 @@ class ModelAddUpdate extends Component {
       padding: "54px 54px"
     };
     const { disableButton } = this.state;
-    const styleLabel = {fontWeight: "bold"};
+    const styleLabel = { fontWeight: "bold" };
     return (
       <div style={{ margin: "0 auto" }}>
         <Modal isOpen={this.props.show} className="modal-lg">
-          <ModalHeader toggle={this.props.toggle}>Student Submit & Update Form</ModalHeader>
+          <ModalHeader toggle={this.props.toggle}>
+            Student Submit & Update Form
+          </ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
               <label style={styleLabel}>Title:</label>
@@ -163,7 +173,7 @@ class ModelAddUpdate extends Component {
                 formdata={this.state.formData.title}
                 change={e => this.updateForm(e)}
               />
-               <label style={styleLabel}>Description:</label>
+              <label style={styleLabel}>Description:</label>
               <FormField
                 id="description"
                 formdata={this.state.formData.description}
@@ -228,18 +238,43 @@ class ModelAddUpdate extends Component {
                 <label>I agree to the Terms and Conditions</label>
                 <div>
                   <ul>
-                    <li>Student contributions must be in word format and be smaller than 1 MB
-                    Images submitted by students must have high image quality such as photograph, ...</li>
-                    <li>Images must be carefully reviewed before uploading.</li> 
-                    <li>Images must not contain violent and sexy information.</li> 
-                    <li>Images uploaded by students must be smaller than 20 MB.</li> 
-                    <li> Students can upload contributions within 45 days from the start of each term to the closure date.</li> 
-                    <li> Students can edit contributions for 2 months from the start of each term to the final closure date.</li> 
-                    <li> Students can upload many contributions. Each contribution can only be uploaded to one-word file and one image file.</li> 
-                    <li>The approved contributions by marketing coordinator will not be updated anymore.</li> 
-                    <li>Students should read the term and condition carefully before submitting.</li> 
+                    <li>
+                      Student contributions must be in word format and be
+                      smaller than 1 MB Images submitted by students must have
+                      high image quality such as photograph, ...
+                    </li>
+                    <li>Images must be carefully reviewed before uploading.</li>
+                    <li>
+                      Images must not contain violent and sexy information.
+                    </li>
+                    <li>
+                      Images uploaded by students must be smaller than 20 MB.
+                    </li>
+                    <li>
+                      {" "}
+                      Students can upload contributions within 45 days from the
+                      start of each term to the closure date.
+                    </li>
+                    <li>
+                      {" "}
+                      Students can edit contributions for 2 months from the
+                      start of each term to the final closure date.
+                    </li>
+                    <li>
+                      {" "}
+                      Students can upload many contributions. Each contribution
+                      can only be uploaded to one-word file and one image file.
+                    </li>
+                    <li>
+                      The approved contributions by marketing coordinator will
+                      not be updated anymore.
+                    </li>
+                    <li>
+                      Students should read the term and condition carefully
+                      before submitting.
+                    </li>
                   </ul>
-                  </div>
+                </div>
               </div>
             </form>
           </ModalBody>
@@ -261,4 +296,4 @@ class ModelAddUpdate extends Component {
   }
 }
 
-export default ModelAddUpdate
+export default ModelAddUpdate;

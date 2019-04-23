@@ -107,7 +107,7 @@ class ModalComment extends Component {
 
   render() {
     const { title, description, fileURL, imageURL, dateCreated } = this.state;
-    const styleLabel = {fontWeight: "bold"};
+    const styleLabel = { fontWeight: "bold" };
     return (
       <div style={{ margin: "0 auto" }}>
         <Modal isOpen={this.props.show} className="modal-lg">
@@ -123,8 +123,8 @@ class ModalComment extends Component {
               <br />
               <label style={styleLabel}>File Image:</label>
               <img
-                width="200"
-                height="300"
+                width="50%"
+                height="50%"
                 src={"http://localhost:49763/" + imageURL}
                 alt={title}
               />

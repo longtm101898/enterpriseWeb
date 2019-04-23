@@ -1,30 +1,12 @@
-export const checkValidity = (value, rules) => {
-    let isValid = true;
-    if (!rules) {
-        return true;
-    }
+export function getFormattedDate(date){
+    console.log(date)
+  var year = date.getFullYear();
 
-    if (rules.required) {
-        isValid = value.trim() !== '' && isValid;
-    }
+  var month = (1 + date.getMonth()).toString();
+  month = month.length > 1 ? month : "0" + month;
 
-    if (rules.minLength) {
-        isValid = value.length >= rules.minLength && isValid
-    }
+  var day = date.getDate().toString();
+  day = day.length > 1 ? day : "0" + day;
 
-    if (rules.maxLength) {
-        isValid = value.length <= rules.maxLength && isValid
-    }
-
-    if (rules.isEmail) {
-        const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-        isValid = pattern.test(value) && isValid
-    }
-
-    if (rules.isNumeric) {
-        const pattern = /^\d+$/;
-        isValid = pattern.test(value) && isValid
-    }
-
-    return isValid;
-}
+  return month + "-" + day + "-" + year;
+};

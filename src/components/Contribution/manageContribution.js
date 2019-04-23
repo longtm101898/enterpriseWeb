@@ -65,22 +65,20 @@ class ManageContribution extends Component {
           >
             <i className="fa fa-comment" />
           </button>
-
-
         </React.Fragment>
       )
     }
   ];
 
   handleDownload(con) {
-    console.log("download")
+    console.log("download");
   }
   async handleComment(con) {
     await this.props.dispatch(getContributionById(con.id));
     this.setState({
       modalComment: !this.state.modalComment,
-      modalContribution: con
-    })
+      modalContribution: this.props.contribution.dataById
+    });
   }
 
   handleDisabled(con) {
@@ -103,15 +101,18 @@ class ManageContribution extends Component {
   };
 
   handleSubmitComment = (conId, comment, status) => {
-    this.props.dispatch(postCommentContribution(conId, comment, status))
+    this.props
+      .dispatch(postCommentContribution(conId, comment, status))
       .then(res =>
         this.props.dispatch(
           getContributionData(this.state.user.Id, this.state.user.Roles)
-        ));
-  }
+        )
+      );
+  };
 
-  handleSubmit = (conSubmit, conId, img, word, userId) => {
+  handleSubmit = (conSubmit, conId, img, word) => {
     var termId = this.state.term.id;
+    var userId = this.state.user.Id;
     this.props
       .dispatch(postContribution(conSubmit, conId, img, word, userId, termId))
       .then(res =>
@@ -122,7 +123,7 @@ class ManageContribution extends Component {
   };
 
   async showUpdateForm(con) {
-    await this.props.dispatch(getContributionById(con.id))
+    await this.props.dispatch(getContributionById(con.id));
     this.setState({
       modalShow: !this.state.modalShow,
       modalContribution: this.props.contribution.dataById
@@ -143,14 +144,12 @@ class ManageContribution extends Component {
       this.setState({
         disbaledAdd: d2 < d1 ? true : false
       });
-    }
-    else {
+    } else {
       window.alert("You can't submit contribution now!!");
       this.setState({
         disbaledAdd: false
       });
     }
-
   };
 
   componentDidMount = async () => {
@@ -163,27 +162,28 @@ class ManageContribution extends Component {
   };
 
   toggle = () => {
-    if (this.state.disbaledAdd === false && this.state.modalContribution === "") {
+    if (
+      this.state.disbaledAdd === false &&
+      this.state.modalContribution === ""
+    ) {
       this.setState({
         modalShow: false,
         modalContribution: ""
       });
-    }
-    else {
+    } else {
       this.setState({
         modalShow: !this.state.modalShow,
         modalContribution: ""
       });
     }
-
   };
 
   toggleComment = () => {
     this.setState({
       modalComment: !this.state.modalComment,
       modalContribution: ""
-    })
-  }
+    });
+  };
 
   getData = () => {
     const { pageSize, currentPage, searchQuery } = this.state;
@@ -210,7 +210,6 @@ class ManageContribution extends Component {
     });
   };
 
-
   render() {
     const {
       pageSize,
@@ -223,7 +222,9 @@ class ManageContribution extends Component {
     const { data: dataPagination, itemsCount } = this.getData();
     return (
       <div style={{ marginLeft: "50px" }}>
-        <h1 className="h3 mb-2 text-gray-800 text-center">Manage Contribution</h1>
+        <h1 className="h3 mb-2 text-gray-800 text-center">
+          Manage Contribution
+        </h1>
         <div className="row justify-content-end">
           <div className="col-6">
             <input
@@ -231,16 +232,17 @@ class ManageContribution extends Component {
               type="text"
               className="form-control"
               onChange={this.handleSearch}
-            /></div>
+            />
+          </div>
           <div className="col-4">
-            <button
-              onClick={this.toggle}
-              className="btn btn-info"
-            >
+            <button onClick={this.toggle} className="btn btn-info">
               Add new Contribution
             </button>
-            {disbaledAdd === false ? <p style={{ color: "red" }}>The Term is out of date</p> : ""}
-
+            {disbaledAdd === false ? (
+              <p style={{ color: "red" }}>The Term is out of date</p>
+            ) : (
+              ""
+            )}
           </div>
         </div>
         <ModalComment
@@ -262,8 +264,10 @@ class ManageContribution extends Component {
           <div className="col-4">
             <button
               onClick={() => this.handleDownload()}
-              className="btn btn-success btn-sm">
-              <i className="fa fa-download" />
+              className="btn btn-success btn-sm"
+            >
+              <i className="fa fa-download" style={{ marginRight: 5 }} />
+              Download by term
             </button>
           </div>
           <div className="col-4">
@@ -275,8 +279,6 @@ class ManageContribution extends Component {
             />
           </div>
         </div>
-
-
       </div>
     );
   }
