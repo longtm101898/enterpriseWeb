@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { update, populateOptionFields } from "../utils/Form/formAction";
+import { toast } from "react-toastify";
 import FormField from "../utils/Form/formField";
 import { getFormattedDate } from "../../shared/utility";
+import ewApi from "../../axios-ew";
 
 class ModalDownload extends Component {
   state = {
@@ -58,7 +60,22 @@ class ModalDownload extends Component {
     });
   };
   submitDownload = () => {
-    console.log(this.state.termData);
+    const { termData } = this.state;
+    var datestarted = getFormattedDate(new Date(termData.dateStarted));
+    var closingdate = getFormattedDate(new Date(termData.closingDate));
+    ewApi
+      .get(
+        `contribution/zip?termName=${
+          termData.name
+        }&startDate=${datestarted}&closingDate=${closingdate}`
+      )
+      .then(res => {
+        console.log(res)
+        toast.success("Download zip successfully!!!");
+        window.open("http://localhost:49763/" + res.data, "_blank");
+      })
+      .catch(err => toast.error("Download error!!!"));
+    this.props.toggle();
   };
   componentDidMount() {
     this.setState({
