@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import CanvasJSReact from "../../assets/canvasjs.react";
 import ewApi from "../../axios-ew";
+import { getCurrentUser } from "../../services/authService";
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class Dashboard extends Component {
@@ -57,7 +58,6 @@ class Dashboard extends Component {
         }
       ];
       var newData = { ...this.state.options2, data };
-      console.log(popData);
       this.setState({ options2: newData });
     });
   }
@@ -85,25 +85,30 @@ class Dashboard extends Component {
     return res.data;
   };
   render() {
+    var user = getCurrentUser();
     return (
       <div style={{ marginLeft: "80px" }}>
         <div className="row">
-          <div className="col-xl-6 col-lg-6">
-            <div className="card shadow mb-4">
-              <div className="card-header py-3">
-                <h2>Statistic</h2>
+          {user.Roles === "Admin" ? (
+            <React.Fragment>
+              <div className="col-xl-6 col-lg-6">
+                <div className="card shadow mb-4">
+                  <div className="card-header py-3">
+                    <h2>Statistic</h2>
+                  </div>
+                  <CanvasJSChart options={this.state.options1} />
+                </div>
               </div>
-              <CanvasJSChart options={this.state.options1} />
-            </div>
-          </div>
-          <div className="col-xl-5 col-lg-6">
-            <div className="card shadow mb-4">
-              <div className="card-header py-3">
-                <h2>Statistic</h2>
+              <div className="col-xl-5 col-lg-6">
+                <div className="card shadow mb-4">
+                  <div className="card-header py-3">
+                    <h2>Statistic</h2>
+                  </div>
+                  <CanvasJSChart options={this.state.options2} />
+                </div>
               </div>
-              <CanvasJSChart options={this.state.options2} />
-            </div>
-          </div>
+            </React.Fragment>
+          ) : <h2>Dashboard</h2>}
         </div>
       </div>
     );

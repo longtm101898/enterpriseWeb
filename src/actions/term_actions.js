@@ -3,7 +3,11 @@ import { GET_TERM_DATA, GET_CURRENT_TERM, GET_OUTDATED_TERM } from "./types";
 
 export const getTermData = () => async dispatch => {
   await ewApi
-    .get("term")
+    .get("term", {
+      headers: {
+        Authorization: "Bearer ".concat(localStorage.getItem("tokenKey"))
+      }
+    })
     .then(res => dispatch({ type: GET_TERM_DATA, payload: res.data }));
 };
 

@@ -68,9 +68,7 @@ class Login extends Component {
   };
   render() {
     let authRedirect = null;
-    console.log(this.props.isAuth);
     if (this.props.isAuth === true) {
-      console.log(this.props.isAuth);
       authRedirect = <Redirect to="/role" />;
     }
     // console.log("auth" + this.props.isAuth)

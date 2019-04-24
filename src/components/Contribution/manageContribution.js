@@ -13,7 +13,7 @@ import { getCurrentTerm, getOutdatedTerm } from "../../actions/term_actions";
 import ModalAddUpdate from "./modalAddUpdate";
 import ModalComment from "./modalComment";
 import Pagination from "../utils/pagination";
-import { getCurrentUser } from "../../services/authService";
+import { getCurrentUser, hasPermission } from "../../services/authService";
 import ModalDownload from "./modalDownload";
 
 class ManageContribution extends Component {
@@ -49,25 +49,31 @@ class ManageContribution extends Component {
       key: "update",
       content: con => (
         <React.Fragment>
-          <button
-            onClick={() => this.showUpdateForm(con)}
-            className="btn btn-primary btn-sm"
-            disabled={this.handleDisabled(con)}
-          >
-            <i className="fa fa-pen" />
-          </button>
-          <button
-            onClick={() => this.handleDelete(con)}
-            className="btn btn-danger btn-sm"
-          >
-            <i className="fa fa-trash" />
-          </button>
-          <button
-            onClick={() => this.handleComment(con)}
-            className="btn btn-secondary btn-sm"
-          >
-            <i className="fa fa-comment" />
-          </button>
+          {hasPermission("CONTRIBUTION.VIEW_UPDATE", "update") && (
+            <button
+              onClick={() => this.showUpdateForm(con)}
+              className="btn btn-primary btn-sm"
+              disabled={this.handleDisabled(con)}
+            >
+              <i className="fa fa-pen" />
+            </button>
+          )}
+          {hasPermission("CONTRIBUTION.VIEW_DELETE", "delete") && (
+            <button
+              onClick={() => this.handleDelete(con)}
+              className="btn btn-danger btn-sm"
+            >
+              <i className="fa fa-trash" />
+            </button>
+          )}
+          {hasPermission("CONTRIBUTION.VIEW_COMMENT", "update") && (
+            <button
+              onClick={() => this.handleComment(con)}
+              className="btn btn-secondary btn-sm"
+            >
+              <i className="fa fa-comment" />
+            </button>
+          )}
         </React.Fragment>
       )
     }
@@ -79,7 +85,7 @@ class ManageContribution extends Component {
       modalDownloadShow: !this.state.modalDownloadShow,
       modalDownloadData: this.props.term.outDatedTerm
     });
-  }
+  };
   async handleComment(con) {
     await this.props.dispatch(getContributionById(con.id));
     this.setState({
@@ -246,14 +252,15 @@ class ManageContribution extends Component {
             />
           </div>
           <div className="col-4">
-            <button onClick={this.toggle} className="btn btn-info">
-              Add new Contribution
-            </button>
-            {disbaledAdd === false ? (
-              <p style={{ color: "red" }}>The Term is out of date</p>
-            ) : (
-              ""
-            )}
+            {!disbaledAdd &&
+              hasPermission("CONTRIBUTION.ADD_CREATE", "create") && (
+                <React.Fragment>
+                  <button onClick={this.toggle} className="btn btn-info">
+                    Add new Contribution
+                  </button>
+                  <p style={{ color: "red" }}>The Term is out of date</p>
+                </React.Fragment>
+              )}
           </div>
         </div>
         <ModalComment
@@ -286,13 +293,15 @@ class ManageContribution extends Component {
             />
           </div>
           <div className="col-4">
-            <button
-              onClick={this.handleDownload}
-              className="btn btn-success btn-sm"
-            >
-              <i className="fa fa-download" style={{ marginRight: 5 }} />
-              Download by term
-            </button>
+            {hasPermission("CONTRIBUTION.VIEW_DOWNLOAD", "download") && (
+              <button
+                onClick={this.handleDownload}
+                className="btn btn-success btn-sm"
+              >
+                <i className="fa fa-download" style={{ marginRight: 5 }} />
+                Download by term
+              </button>
+            )}
           </div>
         </div>
       </div>
