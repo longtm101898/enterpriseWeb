@@ -62,3 +62,9 @@ export const deleteUser = (userId) => async dispatch =>{
   .delete("user/"+userId)
   .then(res => console.log(res));
 }
+
+export const postUserProfile = (userId, fullName, phoneNumber, avatar) => async dispatch =>{
+  await ewApi
+  .post("user/updateuserprofile?userId="+userId+"&fullName="+fullName+"&phoneNumber="+phoneNumber+"&avatar="+avatar)
+  .then(res => console.log(res));
+}

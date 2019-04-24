@@ -5,13 +5,15 @@ import Pagination from '../utils/pagination';
 import Table from "../utils/table/table";
 import { getUserData, getUserDataById, postUser, deleteUser } from "../../actions/user_actions";
 import ModalAddUpdate from './modalAddUpdate';
+import ModalInfoUser from './modalInfoUser';
 class ManageUser extends Component {
     state = {
         pageSize: 4,
         currentPage: 1,
         searchQuery: "",
         modalShow: false,
-        modalUser: ""
+        modalUser: "",
+        modalShowInfo: false
     };
     columns = [
         {
@@ -75,7 +77,7 @@ class ManageUser extends Component {
     async handleInfor(user) {
         await this.props.dispatch(getUserDataById(user.id));
         this.setState({
-            modalShow: !this.state.modalShow,
+            modalShowInfo: !this.state.modalShowInfo,
             modalUser: this.props.user,
         });
     }
@@ -90,6 +92,13 @@ class ManageUser extends Component {
         });
 
     };
+
+    toggleInfo = () =>{
+        this.setState({
+            modalShowInfo: !this.state.modalShowInfo,
+            modalUser: ""
+        });
+    }
     getData = () => {
         const { pageSize, currentPage, searchQuery } = this.state;
         let filtered = this.props.users.data;
@@ -124,6 +133,7 @@ class ManageUser extends Component {
             currentPage,
             modalUser,
             modalShow,
+            modalShowInfo
         } = this.state;
         const { data: dataPagination, itemsCount } = this.getData();
         return (
@@ -145,6 +155,11 @@ class ManageUser extends Component {
                          </button>
                     </div>
                 </div>
+                <ModalInfoUser
+                    show={modalShowInfo}
+                    toggle={this.toggleInfo}
+                    userInfo={modalUser}
+                />
                 <ModalAddUpdate
                     show={modalShow}
                     toggle={this.toggle}
