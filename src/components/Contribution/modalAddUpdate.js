@@ -219,9 +219,15 @@ class ModelAddUpdate extends Component {
                       <ul>
                         {acceptedFiles &&
                           acceptedFiles.map(file => (
-                            <li key={file.path}>
-                              <i className="far fa-file-image" /> {file.path}
-                            </li>
+                            <div style={{width: 100, height: 100}} key={file.name}>
+                              <img
+                                width="auto"
+                                height="100%"
+                                src={"http://localhost:49763/" + this.state.img}
+                                alt="img"
+                                key={file.name}
+                              />
+                            </div>
                           ))}
                       </ul>
                     </div>
@@ -234,8 +240,10 @@ class ModelAddUpdate extends Component {
                   id="termandcondition"
                   name="termandcondition"
                   onChange={this.handleChange}
-                ></input>
-                <label for="termandcondition">I agree to the Terms and Conditions</label>
+                />
+                <label htmlFor="termandcondition">
+                  I agree to the Terms and Conditions
+                </label>
                 <div>
                   <ul>
                     <li>
@@ -250,11 +258,11 @@ class ModelAddUpdate extends Component {
                     <li>
                       Images uploaded by students must be smaller than 20 MB.
                     </li>
-                    <li>                   
+                    <li>
                       Students can upload contributions within 45 days from the
                       start of each term to the closure date.
                     </li>
-                    <li>                   
+                    <li>
                       Students can edit contributions for 2 months from the
                       start of each term to the final closure date.
                     </li>

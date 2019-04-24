@@ -252,15 +252,14 @@ class ManageContribution extends Component {
             />
           </div>
           <div className="col-4">
-            {!disbaledAdd &&
-              hasPermission("CONTRIBUTION.ADD_CREATE", "create") && (
-                <React.Fragment>
-                  <button onClick={this.toggle} className="btn btn-info">
-                    Add new Contribution
-                  </button>
-                  <p style={{ color: "red" }}>The Term is out of date</p>
-                </React.Fragment>
-              )}
+            {hasPermission("CONTRIBUTION.ADD_CREATE", "create") && (
+              <button onClick={this.toggle} className="btn btn-info">
+                Add new Contribution
+              </button>
+            )}
+            {!disbaledAdd && (
+               <p style={{ color: "red" }}>The Term is out of date</p>
+            )}
           </div>
         </div>
         <ModalComment

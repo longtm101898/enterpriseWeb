@@ -35,7 +35,7 @@ class Dashboard extends Component {
           type: "pie",
           showInLegend: true,
           legendText: "{label}",
-          toolTipContent: "{label}: <strong>{y}%</strong>",
+          toolTipContent: "{label}: <strong>{y} articles</strong>",
           indexLabel: "{y}",
           indexLabelPlacement: "inside",
           dataPoints: popData
@@ -51,7 +51,7 @@ class Dashboard extends Component {
           type: "column",
           showInLegend: true,
           legendText: "{label}",
-          toolTipContent: "{label}: <strong>{y}%</strong>",
+          toolTipContent: "{label}: <strong>{y} Contributors</strong>",
           indexLabel: "{y}",
           indexLabelPlacement: "inside",
           dataPoints: popData
