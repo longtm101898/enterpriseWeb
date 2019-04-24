@@ -70,7 +70,6 @@ class ModalDownload extends Component {
         }&startDate=${datestarted}&closingDate=${closingdate}`
       )
       .then(res => {
-        console.log(res)
         toast.success("Download zip successfully!!!");
         window.open("http://localhost:49763/" + res.data, "_blank");
       })

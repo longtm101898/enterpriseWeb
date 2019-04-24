@@ -43,6 +43,7 @@ const FormField = ({ formdata, change, id }) => {
               </div>
             ) : null}
             <select
+              className="form-control"
               value={formdata.value}
               onBlur={event => change({ event, id, blur: true })}
               onChange={event => change({ event, id })}
