@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import FormField from "../utils/Form/formField";
 import { connect } from "react-redux";
 import { getRoleData } from "../../actions/role_actions";
 import { getFacultiesData } from "../../actions/faculties_actions";
-import Dropzone from 'react-dropzone';
-import ewApi from '../../axios-ew';
+import Dropzone from "react-dropzone";
+import ewApi from "../../axios-ew";
 import {
   update,
   generateData,
@@ -59,9 +59,7 @@ class modalAddUpdate extends Component {
           type: "password",
           placeholder: "Enter user password"
         },
-        validation: {
-
-        },
+        validation: {},
         valid: false,
         touched: false,
         validationMessage: ""
@@ -88,10 +86,7 @@ class modalAddUpdate extends Component {
         config: {
           className: "form-control form-control-user",
           name: "status_input",
-          options: [
-            { "key": 0, "value": "InActive" },
-            { "key": 1, "value": "Active" }
-          ]
+          options: [{ key: 0, value: "InActive" }, { key: 1, value: "Active" }]
         },
         validation: {
           required: true
@@ -114,7 +109,7 @@ class modalAddUpdate extends Component {
         },
         valid: false,
         touched: false,
-        validationMessage: "",
+        validationMessage: ""
       },
       facultiesId: {
         element: "select",
@@ -122,7 +117,7 @@ class modalAddUpdate extends Component {
         config: {
           className: "form-control form-control-user",
           name: "facultiesId_input",
-          options: [],
+          options: []
         },
         validation: {
           required: true
@@ -130,14 +125,14 @@ class modalAddUpdate extends Component {
         valid: false,
         touched: false,
         validationMessage: ""
-      },
+      }
     }
   };
   componentWillReceiveProps(nextProps) {
     if (nextProps.userInfo !== "") {
       for (var i = 0; i < this.props.roles.data.length; i++) {
         if (this.props.roles.data[i].name === nextProps.userInfo.roles[0]) {
-          nextProps.userInfo.roles = this.props.roles.data[i].id
+          nextProps.userInfo.roles = this.props.roles.data[i].id;
         }
       }
       var userForm = populateFields(this.state.formData, nextProps.userInfo);
@@ -153,17 +148,24 @@ class modalAddUpdate extends Component {
     await this.props.dispatch(getFacultiesData());
 
     this.setState({
-      modal: this.props.show,
+      modal: this.props.show
     });
-    var newuser = populateOptionFields(this.state.formData, this.props.roles.data, "roles");
+    var newuser = populateOptionFields(
+      this.state.formData,
+      this.props.roles.data,
+      "roles"
+    );
     this.setState({
       formData: newuser
-    })
-    var newfacultiesId = populateOptionFields(this.state.formData, this.props.faculties.data, "facultiesId");
+    });
+    var newfacultiesId = populateOptionFields(
+      this.state.formData,
+      this.props.faculties.data,
+      "facultiesId"
+    );
     this.setState({
       formData: newfacultiesId
-    })
-
+    });
   }
 
   updateForm = element => {
@@ -179,15 +181,14 @@ class modalAddUpdate extends Component {
     let formIsValid = isFormValid(this.state.formData, "user");
     for (var i = 0; i < this.props.roles.data.length; i++) {
       if (this.props.roles.data[i].id === dataToSubmit.roles) {
-        dataToSubmit.roles = [this.props.roles.data[i].name]
+        dataToSubmit.roles = [this.props.roles.data[i].name];
       }
     }
     if (formIsValid) {
       if (this.state.userId !== 0) {
-        this.props.onSubmit(dataToSubmit, this.state.userId)
+        this.props.onSubmit(dataToSubmit, this.state.userId);
       } else {
-
-        this.props.onSubmit(dataToSubmit, "")
+        this.props.onSubmit(dataToSubmit, "");
       }
       this.props.toggle();
     } else {
@@ -196,7 +197,7 @@ class modalAddUpdate extends Component {
       });
     }
   };
-  handleFile = (acceptedFiles) => {
+  handleFile = acceptedFiles => {
     if (acceptedFiles.length !== 0) {
       var ext = acceptedFiles[0].name.substring(
         acceptedFiles[0].name.lastIndexOf(".")
@@ -207,7 +208,7 @@ class modalAddUpdate extends Component {
       // var fileData = File(acceptedFiles[0])
       ewApi.post("upload", formData).then(res => {
         if (ext === ".docx" || ext === ".doc") {
-          console.log('word')
+          console.log("word");
         }
         if (ext === ".jpg" || ext === ".jpeg" || ext === ".png") {
           this.setState({ img: res.data });
@@ -216,81 +217,83 @@ class modalAddUpdate extends Component {
     } else {
       alert("The file is invalid !!!");
     }
-  }
+  };
 
   render() {
     const dropzoneStyled = {
-      border: '2px dashed #0087F7',
-      borderRadius: '5px',
-      background: '#ebd5d5',
-      cursor: 'pointer',
-      padding: '54px 54px'
-    }
-    const styleLabel = {fontWeight: "bold"};
+      border: "2px dashed #0087F7",
+      borderRadius: "5px",
+      background: "#ebd5d5",
+      cursor: "pointer",
+      padding: "54px 54px"
+    };
+    const styleLabel = { fontWeight: "bold" };
     return (
       <div>
         <Modal isOpen={this.props.show} toggle={this.props.toggle}>
           <ModalHeader>User add & update</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
-            <label style={styleLabel}>Full name:</label>
+              <label style={styleLabel}>Full name:</label>
               <FormField
                 id={"fullName"}
                 formdata={this.state.formData.fullName}
                 change={element => this.updateForm(element)}
               />
-               <label style={styleLabel}>Email:</label>
+              <label style={styleLabel}>Email:</label>
               <FormField
                 id={"email"}
                 formdata={this.state.formData.email}
                 change={element => this.updateForm(element)}
               />
-               <label style={styleLabel}>Password:</label>
+              <label style={styleLabel}>Password:</label>
               <FormField
                 id={"password"}
                 formdata={this.state.formData.password}
                 change={element => this.updateForm(element)}
               />
-               <label style={styleLabel}>Phone Number:</label>
+              <label style={styleLabel}>Phone Number:</label>
               <FormField
                 id={"phoneNumber"}
                 formdata={this.state.formData.phoneNumber}
                 change={element => this.updateForm(element)}
               />
-               <label style={styleLabel}>Avatar:</label>
+              <label style={styleLabel}>Avatar:</label>
               <Dropzone onDrop={this.handleFile} accept="image/*">
-                            {({ getRootProps, getInputProps, acceptedFiles }) => (
-                              <section>
-                                <div {...getRootProps()} style={dropzoneStyled}>
-                                  <input {...getInputProps()} />
-                                  <p>
-                                    {acceptedFiles.length !== 0 ? (
-                                      ''
-                                    ) : (
-                                      "Drag 'n' drop some files here, or click to select files"
-                                    )}
-                                  </p>
-                                  <ul>
-                                    {acceptedFiles &&
-                                      acceptedFiles.map((file) => <li key={file.path}><i className="far fa-file-image"></i> {file.path}</li>)}
-                                  </ul>
-                                </div>
-                              </section>
-                            )}
-                            </Dropzone>
+                {({ getRootProps, getInputProps, acceptedFiles }) => (
+                  <section>
+                    <div {...getRootProps()} style={dropzoneStyled}>
+                      <input {...getInputProps()} />
+                      <p>
+                        {acceptedFiles.length !== 0
+                          ? ""
+                          : "Drag 'n' drop some files here, or click to select files"}
+                      </p>
+                      <ul>
+                        {acceptedFiles &&
+                          acceptedFiles.map(file => (
+                            <li key={file.path}>
+                              <i className="far fa-file-image" /> {file.path}
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
               <label style={styleLabel}>Status:</label>
               <FormField
                 id={"status"}
                 formdata={this.state.formData.status}
                 change={element => this.updateForm(element)}
               />
-               <label style={styleLabel}>Role:</label>
+              <label style={styleLabel}>Role:</label>
               <FormField
                 id={"roles"}
                 formdata={this.state.formData.roles}
                 change={element => this.updateForm(element)}
               />
-               <label style={styleLabel}>Faculties:</label>
+              <label style={styleLabel}>Faculties:</label>
               <FormField
                 id={"facultiesId"}
                 formdata={this.state.formData.facultiesId}
@@ -301,10 +304,10 @@ class modalAddUpdate extends Component {
           <ModalFooter>
             <Button color="primary" onClick={e => this.submitForm(e)}>
               Submit
-                        </Button>
+            </Button>
             <Button color="danger" onClick={this.props.toggle}>
               Cancel
-                        </Button>
+            </Button>
           </ModalFooter>
         </Modal>
       </div>
