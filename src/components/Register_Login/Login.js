@@ -62,7 +62,7 @@ class Login extends Component {
     if (formIsValid) {
       this.props.onSubmitForm(dataToSubmit);
     } else {
-      toast.error("Please fill username & password")
+      toast.error("Please fill username & password");
       this.setState({
         formError: true
       });
@@ -85,7 +85,7 @@ class Login extends Component {
               <h1 className="h4 text-gray-900 mb-4">Welcome Back!</h1>
             </div>
           </div>
-          <form className="user">
+          <form className="user" onSubmit={e => this.submitForm(e)}>
             <FormField
               id="email"
               formdata={this.state.formData.email}

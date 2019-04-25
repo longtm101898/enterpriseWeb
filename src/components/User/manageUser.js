@@ -72,14 +72,13 @@ class ManageUser extends Component {
       this.props
         .dispatch(deleteUser(user.id))
         .then(res => this.props.dispatch(getUserData()));
-      toast.success("Delete user successfully!!!")
+      toast.success("Delete user successfully!!!");
     }
   };
   handleSubmit = (userSubmit, userId) => {
     this.props
       .dispatch(postUser(userSubmit, userId))
       .then(res => this.props.dispatch(getUserData()));
-    toast.success("Add & update User Successfully!!!")
   };
   async showUpdateForm(user) {
     await this.props.dispatch(getUserDataById(user.id));
@@ -127,8 +126,10 @@ class ManageUser extends Component {
     }
     const dataPagination = paginate(filtered, currentPage, pageSize);
     dataPagination.filter(user => {
-      if (user.status == 1) user.status = (<span className="text-success">Active</span>);
-      else if (user.status == 0) user.status = (<span className="text-danger">Blocked</span>);
+      if (user.status == 1)
+        user.status = <span className="text-success">Active</span>;
+      else if (user.status == 0)
+        user.status = <span className="text-danger">Blocked</span>;
     });
     return { data: dataPagination, itemsCount: filtered.length };
   };

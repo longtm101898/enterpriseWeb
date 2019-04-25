@@ -31,7 +31,8 @@ class modalAddUpdate extends Component {
           placeholder: "Enter user name"
         },
         validation: {
-          required: true
+          required: true,
+          specialcharacter: true
         },
         valid: false,
         touched: false,
@@ -46,7 +47,10 @@ class modalAddUpdate extends Component {
           type: "email",
           placeholder: "Enter user email"
         },
-        validation: {},
+        validation: {
+          required: true,
+          email: true
+        },
         valid: false,
         touched: false,
         validationMessage: ""
@@ -71,7 +75,7 @@ class modalAddUpdate extends Component {
         config: {
           className: "form-control form-control-user",
           name: "phoneNumber_input",
-          type: "text",
+          type: "number",
           placeholder: "Enter user PhoneNumber"
         },
         validation: {

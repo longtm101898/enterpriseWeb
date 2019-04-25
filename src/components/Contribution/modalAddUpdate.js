@@ -103,6 +103,7 @@ class ModelAddUpdate extends Component {
         this.props.onSubmit(dataToSubmit, 0, img, word);
       }
       this.props.toggle();
+      this.setState({ disableButton: false });
     } else {
       toast.error("Form is invalid!!!");
       this.setState({
@@ -139,7 +140,7 @@ class ModelAddUpdate extends Component {
           }
         });
     } else {
-      alert("The file is invalid !!!");
+      toast.warn("File is invalid!!!");
     }
   };
 

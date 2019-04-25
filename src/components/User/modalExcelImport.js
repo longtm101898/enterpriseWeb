@@ -10,7 +10,8 @@ import {
 import FormField from "../utils/Form/formField";
 import Dropzone from "react-dropzone";
 import ewApi from "../../axios-ew";
-import Template from '../../assets/Template_Excel.xlsx'
+import Template from "../../assets/Template_Excel.xlsx";
+import { getUserData } from "../../actions/user_actions";
 
 let formData = new FormData();
 class ModalExcelImport extends Component {
@@ -98,6 +99,7 @@ class ModalExcelImport extends Component {
         )
         .then(res => {
           toast.success(res.data);
+          this.props.dispatch(getUserData());
         });
     } else {
       toast.error("Form is invalid");
@@ -109,7 +111,7 @@ class ModalExcelImport extends Component {
 
   downloadTemplateExcel = e => {
     window.open(Template, "_blank");
-  }
+  };
   render() {
     const dropzoneStyled = {
       border: "2px dashed #0087F7",

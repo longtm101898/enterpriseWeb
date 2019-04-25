@@ -2,10 +2,16 @@ import React, { Component } from "react";
 import Table from "../utils/table/table";
 import { paginate } from "../utils/paginate";
 import { connect } from "react-redux";
-import { getRoleData, postData, putData, deleteData } from "../../actions/role_actions";
+import {
+  getRoleData,
+  postData,
+  putData,
+  deleteData
+} from "../../actions/role_actions";
 import ModalAddUpdate from "./modalAddUpdate";
 import { hasPermission } from "../../services/authService";
 import Pagination from "../utils/pagination";
+import { toast } from "react-toastify";
 
 class ManageRole extends Component {
   state = {
@@ -31,19 +37,19 @@ class ManageRole extends Component {
         <React.Fragment>
           {hasPermission("SYSTEM.ROLE_UPDATE", "update") && (
             <button
-            onClick={() => this.showUpdateForm(role)}
-            className="btn btn-primary btn-sm"
-          >
-            <i className="fa fa-pen" />
-          </button>
+              onClick={() => this.showUpdateForm(role)}
+              className="btn btn-primary btn-sm"
+            >
+              <i className="fa fa-pen" />
+            </button>
           )}
           {hasPermission("SYSTEM.ROLE_DELETE", "delete") && (
             <button
-            onClick={() => this.handleDelete(role)}
-            className="btn btn-danger btn-sm"
-          >
-            <i className="fa fa-trash" />
-          </button>
+              onClick={() => this.handleDelete(role)}
+              className="btn btn-danger btn-sm"
+            >
+              <i className="fa fa-trash" />
+            </button>
           )}
         </React.Fragment>
       )
@@ -51,19 +57,26 @@ class ManageRole extends Component {
   ];
   handleDelete = role => {
     var result = window.confirm("Do you want delete this role?");
-    if(result){
-      this.props.dispatch(deleteData(role.id)).then(res => this.props.dispatch(getRoleData()));
-    }  
+    if (result) {
+      this.props
+        .dispatch(deleteData(role.id))
+        .then(res => this.props.dispatch(getRoleData()));
+    }
   };
 
   handleSubmit = (role, roleId) => {
-    if(roleId === ""){
-      this.props.dispatch(postData(role)).then(res => this.props.dispatch(getRoleData()));
+    if (roleId === "") {
+      this.props
+        .dispatch(postData(role))
+        .then(res => this.props.dispatch(getRoleData()));
+      toast.success("Add role successfully!!!");
+    } else {
+      this.props
+        .dispatch(putData(role, roleId))
+        .then(res => this.props.dispatch(getRoleData()));
+      toast.success("Update role successfully!!!");
     }
-    else{
-      this.props.dispatch(putData(role, roleId)).then(res => this.props.dispatch(getRoleData()));
-    }
-  }
+  };
 
   showUpdateForm(role) {
     this.setState({
@@ -91,12 +104,8 @@ class ManageRole extends Component {
         m.name.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
     }
-    const dataPagination = paginate(
-      filtered,
-      currentPage,
-      pageSize
-    );
-    return { data: dataPagination, itemsCount: filtered.length};
+    const dataPagination = paginate(filtered, currentPage, pageSize);
+    return { data: dataPagination, itemsCount: filtered.length };
   };
   handleSearch = event => {
     const element = event.target.value;
@@ -105,22 +114,17 @@ class ManageRole extends Component {
     });
   };
 
-  handlePageChange = (page) => {
+  handlePageChange = page => {
     this.setState({
-        currentPage: page
-    })
-};
+      currentPage: page
+    });
+  };
   render() {
-    const {
-      pageSize,
-      currentPage,
-      modalRole,
-      modalShow
-    } = this.state;
+    const { pageSize, currentPage, modalRole, modalShow } = this.state;
     const { data: dataPagination, itemsCount } = this.getData();
     return (
       <div style={{ marginLeft: "50px" }}>
-       <h1 className="h3 mb-2 text-gray-800 text-center">Manage Role</h1>
+        <h1 className="h3 mb-2 text-gray-800 text-center">Manage Role</h1>
         <div className="row justify-content-end">
           <div className="col-6">
             <input
@@ -128,12 +132,10 @@ class ManageRole extends Component {
               type="text"
               className="form-control"
               onChange={this.handleSearch}
-            /></div>
+            />
+          </div>
           <div className="col-4">
-            <button
-              onClick={this.toggle}
-              className="btn btn-info"
-            >
+            <button onClick={this.toggle} className="btn btn-info">
               Add new Role
             </button>
           </div>
