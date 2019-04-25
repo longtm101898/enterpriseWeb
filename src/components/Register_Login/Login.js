@@ -4,6 +4,7 @@ import { withRouter, Redirect } from "react-router-dom";
 import FormField from "../utils/Form/formField";
 import { update, generateData, isFormValid } from "../utils/Form/formAction";
 import { loginUser } from "../../actions/user_actions";
+import { toast } from "react-toastify";
 
 class Login extends Component {
   state = {
@@ -61,6 +62,7 @@ class Login extends Component {
     if (formIsValid) {
       this.props.onSubmitForm(dataToSubmit);
     } else {
+      toast.error("Please fill username & password")
       this.setState({
         formError: true
       });

@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import { update, populateOptionFields } from "../utils/Form/formAction";
+import {
+  update,
+  populateOptionFields,
+  isFormValid
+} from "../utils/Form/formAction";
 import { toast } from "react-toastify";
 import FormField from "../utils/Form/formField";
 import { getFormattedDate } from "../../shared/utility";
@@ -60,21 +64,29 @@ class ModalDownload extends Component {
     });
   };
   submitDownload = () => {
-    const { termData } = this.state;
-    var datestarted = getFormattedDate(new Date(termData.dateStarted));
-    var closingdate = getFormattedDate(new Date(termData.closingDate));
-    ewApi
-      .get(
-        `contribution/zip?termName=${
-          termData.name
-        }&startDate=${datestarted}&closingDate=${closingdate}`
-      )
-      .then(res => {
-        toast.success("Download zip successfully!!!");
-        window.open("http://localhost:49763/" + res.data, "_blank");
-      })
-      .catch(err => toast.error("Download error!!!"));
-    this.props.toggle();
+    let formIsValid = isFormValid(this.state.formData, "down");
+    if (formIsValid) {
+      const { termData } = this.state;
+      var datestarted = getFormattedDate(new Date(termData.dateStarted));
+      var closingdate = getFormattedDate(new Date(termData.closingDate));
+      ewApi
+        .get(
+          `contribution/zip?termName=${
+            termData.name
+          }&startDate=${datestarted}&closingDate=${closingdate}`
+        )
+        .then(res => {
+          toast.success("Download zip successfully!!!");
+          window.open("http://localhost:49763/" + res.data, "_blank");
+        })
+        .catch(err => toast.error("Download error!!!"));
+      this.props.toggle();
+    } else {
+      toast.error("Form is invalid!!!");
+      this.setState({
+        formError: true
+      });
+    }
   };
   componentDidMount() {
     this.setState({

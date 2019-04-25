@@ -12,6 +12,7 @@ import {
 import ModalAddUpdate from "./modalAddUpdate";
 import ModalInfoUser from "./modalInfoUser";
 import ModalExcelImport from "./modalExcelImport";
+import { toast } from "react-toastify";
 class ManageUser extends Component {
   state = {
     pageSize: 4,
@@ -71,12 +72,14 @@ class ManageUser extends Component {
       this.props
         .dispatch(deleteUser(user.id))
         .then(res => this.props.dispatch(getUserData()));
+      toast.success("Delete user successfully!!!")
     }
   };
   handleSubmit = (userSubmit, userId) => {
     this.props
       .dispatch(postUser(userSubmit, userId))
       .then(res => this.props.dispatch(getUserData()));
+    toast.success("Add & update User Successfully!!!")
   };
   async showUpdateForm(user) {
     await this.props.dispatch(getUserDataById(user.id));
@@ -123,6 +126,10 @@ class ManageUser extends Component {
       );
     }
     const dataPagination = paginate(filtered, currentPage, pageSize);
+    dataPagination.filter(user => {
+      if (user.status == 1) user.status = (<span className="text-success">Active</span>);
+      else if (user.status == 0) user.status = (<span className="text-danger">Blocked</span>);
+    });
     return { data: dataPagination, itemsCount: filtered.length };
   };
 
@@ -152,7 +159,7 @@ class ManageUser extends Component {
       <div style={{ marginLeft: "50px" }}>
         <h1 className="h3 mb-2 text-gray-800 text-center">Manage User</h1>
         <div className="row justify-content-end">
-          <div className="col-6">
+          <div className="col-lg-6 col-sm-12 col-xs-12">
             <input
               placeholder="Search User Name"
               type="text"
@@ -160,7 +167,7 @@ class ManageUser extends Component {
               onChange={this.handleSearch}
             />
           </div>
-          <div className="col-4">
+          <div className="col-lg-4 col-sm-12 col-xs-12">
             <button onClick={this.toggleImport} className="btn btn-success">
               Import excel
             </button>

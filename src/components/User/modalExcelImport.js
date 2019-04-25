@@ -4,11 +4,13 @@ import { toast } from "react-toastify";
 import {
   populateOptionFields,
   update,
-  generateData
+  generateData,
+  isFormValid
 } from "../utils/Form/formAction";
 import FormField from "../utils/Form/formField";
 import Dropzone from "react-dropzone";
 import ewApi from "../../axios-ew";
+import Template from '../../assets/Template_Excel.xlsx'
 
 let formData = new FormData();
 class ModalExcelImport extends Component {
@@ -87,15 +89,27 @@ class ModalExcelImport extends Component {
 
   submitExcel = async e => {
     let { role, faculties } = generateData(this.state.formData, "excel");
-    await ewApi
-      .post(
-        `upload/importmultiuserbyexcel?facultiesId=${faculties}&roleId=${role}`,
-        formData
-      )
-      .then(res => {
-        toast.success(res.data);
+    let formIsValid = isFormValid(this.state.formData, "excel");
+    if (formIsValid) {
+      await ewApi
+        .post(
+          `upload/importmultiuserbyexcel?facultiesId=${faculties}&roleId=${role}`,
+          formData
+        )
+        .then(res => {
+          toast.success(res.data);
+        });
+    } else {
+      toast.error("Form is invalid");
+      this.setState({
+        formError: true
       });
+    }
   };
+
+  downloadTemplateExcel = e => {
+    window.open(Template, "_blank");
+  }
   render() {
     const dropzoneStyled = {
       border: "2px dashed #0087F7",
@@ -106,7 +120,7 @@ class ModalExcelImport extends Component {
     };
     return (
       <div style={{ margin: "0 auto" }}>
-        <Modal isOpen={this.props.show} toggle={this.props.toggle} centered>
+        <Modal isOpen={this.props.show} centered>
           <ModalHeader toggle={this.props.toggle}>Import Excel</ModalHeader>
           <ModalBody>
             <form>
@@ -156,6 +170,10 @@ class ModalExcelImport extends Component {
             </form>
           </ModalBody>
           <ModalFooter>
+            <Button color="info" onClick={e => this.downloadTemplateExcel(e)}>
+              <i className="fa fa-download" style={{ marginRight: 10 }} />
+              Template
+            </Button>
             <Button color="primary" onClick={e => this.submitExcel(e)}>
               Submit
             </Button>

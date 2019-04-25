@@ -15,6 +15,7 @@ import ModalComment from "./modalComment";
 import Pagination from "../utils/pagination";
 import { getCurrentUser, hasPermission } from "../../services/authService";
 import ModalDownload from "./modalDownload";
+import { toast } from "react-toastify";
 
 class ManageContribution extends Component {
   state = {
@@ -116,11 +117,12 @@ class ManageContribution extends Component {
   handleSubmitComment = (conId, comment, status) => {
     this.props
       .dispatch(postCommentContribution(conId, comment, status))
-      .then(res =>
+      .then(res => {
         this.props.dispatch(
           getContributionData(this.state.user.Id, this.state.user.Roles)
-        )
-      );
+        );
+        toast.success("Add article Successfully!!!")
+      });
   };
 
   handleSubmit = (conSubmit, conId, img, word) => {
@@ -258,7 +260,7 @@ class ManageContribution extends Component {
               </button>
             )}
             {!disbaledAdd && (
-               <p style={{ color: "red" }}>The Term is out of date</p>
+              <p style={{ color: "red" }}>The Term is out of date</p>
             )}
           </div>
         </div>

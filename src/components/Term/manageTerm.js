@@ -5,6 +5,7 @@ import Table from "../utils/table/table";
 import { getTermData, deleteTerm, postTerm } from "../../actions/term_actions";
 import ModalAddUpdate from "./modalAddUpdate";
 import Pagination from "../utils/pagination";
+import { toast } from "react-toastify";
 
 class ManageTerm extends Component {
   state = {
@@ -54,16 +55,19 @@ class ManageTerm extends Component {
     if (result) {
       this.props
         .dispatch(deleteTerm(term.id))
-        .then(res => this.props.dispatch(getTermData()).then(res => this.handleBtnAdd()));
-      
+        .then(res =>
+          this.props.dispatch(getTermData()).then(res => this.handleBtnAdd())
+        );
     }
   };
 
   handleSubmit = (termSubmit, termId) => {
     this.props
       .dispatch(postTerm(termSubmit, termId))
-      .then(res => this.props.dispatch(getTermData()).then(res => this.handleBtnAdd()));
-   
+      .then(res =>
+        this.props.dispatch(getTermData()).then(res => this.handleBtnAdd())
+      );
+    toast.success("Add Term Successfully!!!");
   };
 
   showUpdateForm(ter) {
@@ -145,7 +149,9 @@ class ManageTerm extends Component {
             >
               Add new Term
             </button>
-            {this.state.disableAdd && <p style={{color:"red"}}>The current term is operating</p>}
+            {this.state.disableAdd && (
+              <p style={{ color: "red" }}>The current term is operating</p>
+            )}
           </div>
         </div>
         <ModalAddUpdate

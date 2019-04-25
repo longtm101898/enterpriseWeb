@@ -14,6 +14,7 @@ import {
   populateFields,
   populateOptionFields
 } from "../utils/Form/formAction";
+import { toast } from "react-toastify";
 class modalAddUpdate extends Component {
   state = {
     modal: false,
@@ -192,6 +193,7 @@ class modalAddUpdate extends Component {
       }
       this.props.toggle();
     } else {
+      toast.error("Form is unvalid!!!")
       this.setState({
         formError: true
       });

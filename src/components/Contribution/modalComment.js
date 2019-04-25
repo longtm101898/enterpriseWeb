@@ -8,6 +8,7 @@ import {
   populateFields
 } from "../utils/Form/formAction";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { toast } from "react-toastify";
 
 class ModalComment extends Component {
   state = {
@@ -99,6 +100,7 @@ class ModalComment extends Component {
       );
       this.props.toggle();
     } else {
+      toast.error("Form is invalid!!!")
       this.setState({
         formError: true
       });

@@ -8,6 +8,7 @@ import {
   resetFields,
   populateFields
 } from "../utils/Form/formAction";
+import { toast } from "react-toastify";
 
 class ModalAddUpdate extends Component {
   state = {
@@ -77,7 +78,6 @@ class ModalAddUpdate extends Component {
     let formIsValid = isFormValid(this.state.formData, "fac");
     if (formIsValid) {
       if (this.state.roleId !== 0) {
-        console.log("update");
         this.props.onSubmit(dataToSubmit, this.state.facId)
       }else{
         this.props.onSubmit(dataToSubmit,0)
@@ -85,6 +85,7 @@ class ModalAddUpdate extends Component {
       // this.props.onSubmitForm(dataToSubmit);
       this.props.toggle();
     } else {
+      toast.error("Form is invalid!!!")
       this.setState({
         formError: true
       });

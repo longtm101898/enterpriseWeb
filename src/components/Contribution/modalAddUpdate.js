@@ -11,6 +11,7 @@ import {
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import ewApi from "../../axios-ew";
 import { getFormattedDate } from "../../shared/utility";
+import { toast } from "react-toastify";
 
 class ModelAddUpdate extends Component {
   state = {
@@ -103,6 +104,7 @@ class ModelAddUpdate extends Component {
       }
       this.props.toggle();
     } else {
+      toast.error("Form is invalid!!!");
       this.setState({
         formError: true
       });
@@ -219,7 +221,10 @@ class ModelAddUpdate extends Component {
                       <ul>
                         {acceptedFiles &&
                           acceptedFiles.map(file => (
-                            <div style={{width: 100, height: 100}} key={file.name}>
+                            <div
+                              style={{ width: 100, height: 100 }}
+                              key={file.name}
+                            >
                               <img
                                 width="auto"
                                 height="100%"
