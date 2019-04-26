@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import { getRoleData } from "../../actions/role_actions";
 import { getFacultiesData } from "../../actions/faculties_actions";
 import Dropzone from "react-dropzone";
-import ewApi from "../../axios-ew";
 import {
   update,
   generateData,

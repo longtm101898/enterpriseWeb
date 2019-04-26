@@ -1,12 +1,18 @@
 import React from "react";
+import { hidden } from "ansi-colors";
 
-const FormField = ({ formdata, change, id }) => {
+const FormField = ({ formdata, change, id, type, showHide }) => {
   const showError = () => {
     let errorMessage = null;
 
-    if ((formdata.validation.length && !formdata.valid) || formdata.validationMessage) {
+    if (
+      (formdata.validation.length && !formdata.valid) ||
+      formdata.validationMessage
+    ) {
       errorMessage = (
-        <div className="alert alert-danger" role="alert">{formdata.validationMessage}</div>
+        <div className="alert alert-danger" role="alert">
+          {formdata.validationMessage}
+        </div>
       );
     }
     return errorMessage;
@@ -19,17 +25,21 @@ const FormField = ({ formdata, change, id }) => {
       case "input":
         formTemplate = (
           <div className="form-group">
-            {formdata.showlabel ? (
-              <div className="custom-control-label">
-                {formdata.config.label}
-              </div>
-            ) : null}
-            <input
-              {...formdata.config}
-              value={formdata.value ? formdata.value : ''}
-              onBlur={event => change({ event, id, blur: true })}
-              onChange={event => change({ event, id })}
-            />
+            <div className={showHide ? "input-group" : ""}>
+              {formdata.showlabel ? (
+                <div className="custom-control-label">
+                  {formdata.config.label}
+                </div>
+              ) : null}
+              <input
+                {...formdata.config}
+                type={type ? type : formdata.config.type}
+                value={formdata.value ? formdata.value : ""}
+                onBlur={event => change({ event, id, blur: true })}
+                onChange={event => change({ event, id })}
+              />
+              {showHide ? showHide : ""}
+            </div>
             {showError()}
           </div>
         );
@@ -67,7 +77,7 @@ const FormField = ({ formdata, change, id }) => {
             ) : null}
             <textarea
               {...formdata.config}
-              value={formdata.value ? formdata.value : ''}
+              value={formdata.value ? formdata.value : ""}
               onBlur={event => change({ event, id, blur: true })}
               onChange={event => change({ event, id })}
             />

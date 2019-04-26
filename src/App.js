@@ -12,6 +12,7 @@ import Dashboard from "./components/dashboard";
 import ProtectedRoute from "./shared/protectedRoute";
 import ManageUser from "./components/User/manageUser";
 import UserProfile from "./components/User/userProfile";
+import ChangePassword from "./components/Register_Login/Changepassword";
 
 class App extends Component {
   render() {
@@ -31,6 +32,11 @@ class App extends Component {
             path="/contribution/view"
             exact
             component={ManageContribution}
+          />
+          <ProtectedRoute
+            path="/user/changepassword"
+            exact
+            component={ChangePassword}
           />
           <ProtectedRoute path="/system/term" exact component={ManageTerm} />
           <ProtectedRoute path="/system/user" exact component={ManageUser} />

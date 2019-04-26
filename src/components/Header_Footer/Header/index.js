@@ -49,6 +49,10 @@ class Header extends Component {
                   <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400" />
                   Profile
                 </Link>
+                <Link className="dropdown-item" to="/user/changepassword">
+                  <i className="fas fa-key fa-sm fa-fw mr-2 text-gray-400" />
+                  Change password
+                </Link>
                 <div className="dropdown-divider" />
                 <a
                   className="dropdown-item"
