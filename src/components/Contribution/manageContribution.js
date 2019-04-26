@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import _ from "lodash";
+import { toast } from "react-toastify";
 import { paginate } from "../utils/paginate";
 import Table from "../utils/table/table";
 import {
@@ -15,7 +17,6 @@ import ModalComment from "./modalComment";
 import Pagination from "../utils/pagination";
 import { getCurrentUser, hasPermission } from "../../services/authService";
 import ModalDownload from "./modalDownload";
-import { toast } from "react-toastify";
 
 class ManageContribution extends Component {
   state = {
@@ -26,7 +27,8 @@ class ManageContribution extends Component {
     modalContribution: "",
     modalComment: false,
     modalDownloadShow: false,
-    modalDownloadData: ""
+    modalDownloadData: "",
+    sortColumn: { path: "title", order: "asc" }
   };
 
   columns = [
@@ -80,6 +82,9 @@ class ManageContribution extends Component {
     }
   ];
 
+  handleSort = sortColumn => {
+    this.setState({ sortColumn });
+  };
   handleDownload = async () => {
     await this.props.dispatch(getOutdatedTerm());
     this.setState({
@@ -121,7 +126,7 @@ class ManageContribution extends Component {
         this.props.dispatch(
           getContributionData(this.state.user.Id, this.state.user.Roles)
         );
-        toast.success("Add article Successfully!!!")
+        toast.success("Add article Successfully!!!");
       });
   };
 
@@ -203,16 +208,16 @@ class ManageContribution extends Component {
   };
 
   getData = () => {
-    const { pageSize, currentPage, searchQuery } = this.state;
+    const { pageSize, currentPage, searchQuery, sortColumn } = this.state;
 
     let filtered = this.props.contribution.data;
     if (searchQuery) {
       filtered = this.props.contribution.data.filter(m =>
-        m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+        m.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-
-    const dataPagination = paginate(filtered, currentPage, pageSize);
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+    const dataPagination = paginate(sorted, currentPage, pageSize);
     return { data: dataPagination, itemsCount: filtered.length };
   };
   handlePageChange = page => {
@@ -236,7 +241,8 @@ class ManageContribution extends Component {
       modalDownloadData,
       modalShow,
       disbaledAdd,
-      modalComment
+      modalComment,
+      sortColumn
     } = this.state;
     const { data: dataPagination, itemsCount } = this.getData();
     return (
@@ -283,7 +289,12 @@ class ManageContribution extends Component {
           term={modalDownloadData}
         />
 
-        <Table data={dataPagination} columns={this.columns} />
+        <Table
+          data={dataPagination}
+          columns={this.columns}
+          sortColumn={sortColumn}
+          onSort={this.handleSort}
+        />
         <div className="row justify-content-start">
           <div className="col-4">
             <Pagination
