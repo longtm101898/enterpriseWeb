@@ -19,7 +19,7 @@ export const validate = (element, formdata = []) => {
   }
 
   if(element.validation.specialcharacter){
-    var format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+    var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
     const valid = !format.test(element.value)
     const message = `${!valid ? "Please do not enter special char" : ""}`;
     error = !valid ? [valid, message] : error;

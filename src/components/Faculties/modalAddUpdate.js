@@ -50,7 +50,10 @@ class ModalAddUpdate extends Component {
   };
   componentWillReceiveProps(nextProps) {
     if (nextProps.facultiesInfo !== "") {
-      var facForm = populateFields(this.state.formData, nextProps.facultiesInfo);
+      var facForm = populateFields(
+        this.state.formData,
+        nextProps.facultiesInfo
+      );
       this.setState({ formData: facForm, facId: nextProps.facultiesInfo.id });
     } else {
       var facRs = resetFields(this.state.formData);
@@ -78,36 +81,42 @@ class ModalAddUpdate extends Component {
     let formIsValid = isFormValid(this.state.formData, "fac");
     if (formIsValid) {
       if (this.state.roleId !== 0) {
-        this.props.onSubmit(dataToSubmit, this.state.facId)
-      }else{
-        this.props.onSubmit(dataToSubmit,0)
+        this.props.onSubmit(dataToSubmit, this.state.facId);
+      } else {
+        this.props.onSubmit(dataToSubmit, 0);
       }
       // this.props.onSubmitForm(dataToSubmit);
       this.props.toggle();
+      this.setState({ formError: false });
     } else {
-      toast.error("Form is invalid!!!")
+      toast.error("Form is invalid!!!");
       this.setState({
         formError: true
       });
     }
-  
   };
 
   render() {
-    const styleLabel = {fontWeight: "bold"};
+    const styleLabel = { fontWeight: "bold" };
     return (
       <div>
         <Modal isOpen={this.props.show} toggle={this.props.toggle}>
           <ModalHeader>Faculties add & update</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
-              <label style={styleLabel}>Name:</label>
+              {this.state.formError && (
+                <div className="alert alert-danger">
+                  <b>Please check your data again</b>
+                  <p>Please input required field (*)</p>
+                </div>
+              )}
+              <label style={styleLabel}>Name*:</label>
               <FormField
                 id={"name"}
                 formdata={this.state.formData.name}
                 change={element => this.updateForm(element)}
               />
-               <label style={styleLabel}>Description:</label>
+              <label style={styleLabel}>Description:</label>
               <FormField
                 id={"description"}
                 formdata={this.state.formData.description}

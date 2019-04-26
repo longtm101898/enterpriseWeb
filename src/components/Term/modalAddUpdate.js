@@ -84,7 +84,7 @@ class ModelAddUpdate extends Component {
       } else {
         this.props.onSubmit(dataToSubmit, 0);
       }
-      // this.props.onSubmitForm(dataToSubmit);
+      this.setState({ formError: false });
       this.props.toggle();
     } else {
       toast.error("Form is invalid!!!");
@@ -101,13 +101,19 @@ class ModelAddUpdate extends Component {
           <ModalHeader>Add & Update Term</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
-              <label style={styleLabel}>Name:</label>
+              {this.state.formError && (
+                <div className="alert alert-danger">
+                  <b>Please check your data again</b>
+                  <p>Please input required field (*)</p>
+                </div>
+              )}
+              <label style={styleLabel}>Name*:</label>
               <FormField
                 id="name"
                 formdata={this.state.formData.name}
                 change={e => this.updateForm(e)}
               />
-              <label style={styleLabel}>Date Started:</label>
+              <label style={styleLabel}>Date Started*:</label>
               <FormField
                 id="dateStarted"
                 formdata={this.state.formData.dateStarted}

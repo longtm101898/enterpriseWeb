@@ -89,12 +89,12 @@ class Dashboard extends Component {
     return (
       <div style={{ marginLeft: "80px" }}>
         <div className="row">
-          {user.Roles === "Admin" ? (
+          {user.Roles === "Admin" || user.Roles==="Marketing Manager" ? (
             <React.Fragment>
               <div className="col-xl-6 col-lg-6">
                 <div className="card shadow mb-4">
                   <div className="card-header py-3">
-                    <h2>Statistic</h2>
+                    <h2>Contributions Statistic</h2>
                   </div>
                   <CanvasJSChart options={this.state.options1} />
                 </div>
@@ -102,7 +102,7 @@ class Dashboard extends Component {
               <div className="col-xl-5 col-lg-6">
                 <div className="card shadow mb-4">
                   <div className="card-header py-3">
-                    <h2>Statistic</h2>
+                    <h2>Contributors Statistic</h2>
                   </div>
                   <CanvasJSChart options={this.state.options2} />
                 </div>

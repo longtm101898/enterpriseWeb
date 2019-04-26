@@ -195,9 +195,10 @@ class modalAddUpdate extends Component {
       } else {
         this.props.onSubmit(dataToSubmit, "");
       }
+      this.setState({ formError: false });
       this.props.toggle();
     } else {
-      toast.error("Form is unvalid!!!")
+      toast.error("Form is unvalid!!!");
       this.setState({
         formError: true
       });
@@ -212,14 +213,11 @@ class modalAddUpdate extends Component {
       let formData = new FormData();
       formData.append("files", acceptedFiles[0], acceptedFiles[0].name);
       // var fileData = File(acceptedFiles[0])
-      ewApi.post("upload", formData).then(res => {
-        if (ext === ".docx" || ext === ".doc") {
-          console.log("word");
-        }
-        if (ext === ".jpg" || ext === ".jpeg" || ext === ".png") {
-          this.setState({ img: res.data });
-        }
-      });
+      // ewApi.post("upload", formData).then(res => {
+      //   if (ext === ".jpg" || ext === ".jpeg" || ext === ".png") {
+      //     this.setState({ img: res.data });
+      //   }
+      // });
     } else {
       alert("The file is invalid !!!");
     }
@@ -240,25 +238,31 @@ class modalAddUpdate extends Component {
           <ModalHeader>User add & update</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
-              <label style={styleLabel}>Full name:</label>
+              {this.state.formError && (
+                <div className="alert alert-danger">
+                  <b>Please check your data again</b>
+                  <p>Please input required field (*)</p>
+                </div>
+              )}
+              <label style={styleLabel}>Full name*:</label>
               <FormField
                 id={"fullName"}
                 formdata={this.state.formData.fullName}
                 change={element => this.updateForm(element)}
               />
-              <label style={styleLabel}>Email:</label>
+              <label style={styleLabel}>Email*:</label>
               <FormField
                 id={"email"}
                 formdata={this.state.formData.email}
                 change={element => this.updateForm(element)}
               />
-              <label style={styleLabel}>Password:</label>
+              <label style={styleLabel}>Password*:</label>
               <FormField
                 id={"password"}
                 formdata={this.state.formData.password}
                 change={element => this.updateForm(element)}
               />
-              <label style={styleLabel}>Phone Number:</label>
+              <label style={styleLabel}>Phone Number*:</label>
               <FormField
                 id={"phoneNumber"}
                 formdata={this.state.formData.phoneNumber}
