@@ -108,7 +108,11 @@ class Dashboard extends Component {
                 </div>
               </div>
             </React.Fragment>
-          ) : <h2>Dashboard</h2>}
+          ) : 
+          <React.Fragment>
+            <img src="/img/welcome.png" width="1400" height="900"></img>
+          </React.Fragment>
+          }
         </div>
       </div>
     );

@@ -8,6 +8,7 @@ import {
   putData,
   deleteData
 } from "../../actions/role_actions";
+import _ from "lodash";
 import ModalAddUpdate from "./modalAddUpdate";
 import { hasPermission } from "../../services/authService";
 import Pagination from "../utils/pagination";
@@ -19,7 +20,8 @@ class ManageRole extends Component {
     currentPage: 1,
     searchQuery: "",
     modalShow: false,
-    modalRole: ""
+    modalRole: "",
+    sortColumn: { path: "name", order: "asc" }
   };
 
   columns = [
@@ -55,6 +57,11 @@ class ManageRole extends Component {
       )
     }
   ];
+
+  handleSort = sortColumn => {
+    this.setState({ sortColumn });
+  };
+
   handleDelete = role => {
     var result = window.confirm("Do you want delete this role?");
     if (result) {
@@ -97,14 +104,15 @@ class ManageRole extends Component {
     });
   };
   getData = () => {
-    const { pageSize, currentPage, searchQuery } = this.state;
+    const { pageSize, currentPage, searchQuery, sortColumn } = this.state;
     let filtered = this.props.roles.data;
     if (searchQuery) {
       filtered = this.props.roles.data.filter(m =>
-        m.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+        m.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-    const dataPagination = paginate(filtered, currentPage, pageSize);
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+    const dataPagination = paginate(sorted, currentPage, pageSize);
     return { data: dataPagination, itemsCount: filtered.length };
   };
   handleSearch = event => {
@@ -120,7 +128,7 @@ class ManageRole extends Component {
     });
   };
   render() {
-    const { pageSize, currentPage, modalRole, modalShow } = this.state;
+    const { pageSize, currentPage, modalRole, modalShow, sortColumn } = this.state;
     const { data: dataPagination, itemsCount } = this.getData();
     return (
       <div style={{ marginLeft: "50px" }}>
@@ -146,7 +154,8 @@ class ManageRole extends Component {
           roleInfo={modalRole}
           onSubmit={this.handleSubmit}
         />
-        <Table data={dataPagination} columns={this.columns} />
+        <Table data={dataPagination} columns={this.columns} sortColumn={sortColumn}
+          onSort={this.handleSort}/>
         <Pagination
           itemsCount={itemsCount}
           pageSize={pageSize}

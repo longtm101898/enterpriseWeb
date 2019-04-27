@@ -61,6 +61,7 @@ export const postUser = (userSubmit, userId) => async dispatch => {
   await ewApi
     .post("user?userId=" + userId, userSubmit)
     .then(res => toast.success(res.data))
+     .catch(err => toast.error(err))
 };
 
 export const deleteUser = userId => async dispatch => {

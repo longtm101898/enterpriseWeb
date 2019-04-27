@@ -17,6 +17,8 @@ import ModalComment from "./modalComment";
 import Pagination from "../utils/pagination";
 import { getCurrentUser, hasPermission } from "../../services/authService";
 import ModalDownload from "./modalDownload";
+import ModalInfo from "./modalInfo";
+import ewApi from "../../axios-ew";
 
 class ManageContribution extends Component {
   state = {
@@ -28,6 +30,7 @@ class ManageContribution extends Component {
     modalComment: false,
     modalDownloadShow: false,
     modalDownloadData: "",
+    modalInfo: false,
     sortColumn: { path: "title", order: "asc" }
   };
 
@@ -49,6 +52,10 @@ class ManageContribution extends Component {
       label: "Term Name"
     },
     {
+      path: "status",
+      label: "status"
+    },
+    {
       key: "update",
       content: con => (
         <React.Fragment>
@@ -65,6 +72,7 @@ class ManageContribution extends Component {
             <button
               onClick={() => this.handleDelete(con)}
               className="btn btn-danger btn-sm"
+              disabled={this.handleDisDelete(con)}
             >
               <i className="fa fa-trash" />
             </button>
@@ -73,10 +81,16 @@ class ManageContribution extends Component {
             <button
               onClick={() => this.handleComment(con)}
               className="btn btn-secondary btn-sm"
+              disabled={this.handleDisComment(con)}
             >
               <i className="fa fa-comment" />
             </button>
           )}
+          <button
+            onClick={() => this.handleInfo(con)}
+            className="btn btn-info btn-sm">
+            <i className="fa fa-info" />
+          </button>
         </React.Fragment>
       )
     }
@@ -85,6 +99,29 @@ class ManageContribution extends Component {
   handleSort = sortColumn => {
     this.setState({ sortColumn });
   };
+
+  handleDisDelete(con) {
+    if ((con.comment !== null || con.status === "Published") && con.status !== "Cancelled") {
+      return true;
+    }
+    else return false;
+  }
+
+  handleDisComment(con) {
+    var d1 = new Date(con.dateCreated);
+    var d2 = new Date();
+    d1.setDate(d1.getDate() + 14);
+    return d2 > d1 ? true : false;
+  }
+
+  handleInfo = async (con) =>{
+    await this.props.dispatch(getContributionById(con.id));
+    this.setState({
+      modalInfo: !this.state.modalInfo,
+      modalContribution: this.props.contribution.dataById
+    })
+  }
+
   handleDownload = async () => {
     await this.props.dispatch(getOutdatedTerm());
     this.setState({
@@ -103,7 +140,8 @@ class ManageContribution extends Component {
   handleDisabled(term) {
     var d1 = new Date(term.closingDate);
     var d2 = new Date();
-    return d2 > d1 ? true : false;
+    if (d2 > d1 || term.status === "Published") return true
+    else return false
   }
 
   handleDelete = con => {
@@ -111,35 +149,50 @@ class ManageContribution extends Component {
     if (result) {
       this.props
         .dispatch(deleteContribution(con.id))
-        .then(res =>
+        .then(res => {
           this.props.dispatch(
             getContributionData(this.state.user.Id, this.state.user.Roles)
-          )
-        );
+          );
+          toast.success("Delete contribution successfully!!!")
+        });
+      this.setState({
+        currentPage: 1
+      })
     }
   };
 
   handleSubmitComment = (conId, comment, status) => {
+    if (comment === null) {
+      comment = ""
+    }
     this.props
       .dispatch(postCommentContribution(conId, comment, status))
       .then(res => {
         this.props.dispatch(
           getContributionData(this.state.user.Id, this.state.user.Roles)
         );
-        toast.success("Add article Successfully!!!");
+        toast.success("Add comment Successfully!!!");
       });
   };
 
   handleSubmit = (conSubmit, conId, img, word) => {
     var termId = this.state.term.id;
     var userId = this.state.user.Id;
+    if(conId === 0){
+      setTimeout(async function(){
+        var user = getCurrentUser();
+        await ewApi.post(`contribution/sendemail?facultiesId=${user.facultiesId}`, {fullName: user.fullName, email: user.Email});
+      }, 800)
+    }
+     
     this.props
       .dispatch(postContribution(conSubmit, conId, img, word, userId, termId))
-      .then(res =>
+      .then(res => {
         this.props.dispatch(
           getContributionData(this.state.user.Id, this.state.user.Roles)
-        )
-      );
+        );
+        conId !== 0 ? toast.success("Update contribution successfully!!!") : toast.success("Add contribution successfully!!!")
+      });
   };
 
   async showUpdateForm(con) {
@@ -197,6 +250,11 @@ class ManageContribution extends Component {
       });
     }
   };
+
+  toggleInfo = () =>{
+    this.setState({modalInfo: !this.state.modalInfo})
+  }
+
   toggleDownload = () => {
     this.setState({ modalDownloadShow: !this.state.modalDownloadShow });
   };
@@ -218,6 +276,11 @@ class ManageContribution extends Component {
     }
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     const dataPagination = paginate(sorted, currentPage, pageSize);
+    dataPagination.filter(contribution => {
+      if (contribution.status == 0) contribution.status = "Waiting"
+      else if (contribution.status == 1) contribution.status = "Cancelled"
+      else if (contribution.status == 2) contribution.status = "Published"
+    })
     return { data: dataPagination, itemsCount: filtered.length };
   };
   handlePageChange = page => {
@@ -242,7 +305,8 @@ class ManageContribution extends Component {
       modalShow,
       disbaledAdd,
       modalComment,
-      sortColumn
+      sortColumn,
+      modalInfo
     } = this.state;
     const { data: dataPagination, itemsCount } = this.getData();
     return (
@@ -287,6 +351,12 @@ class ManageContribution extends Component {
           show={modalDownloadShow}
           toggle={this.toggleDownload}
           term={modalDownloadData}
+        />
+        
+        <ModalInfo
+         show={modalInfo}
+         toggle={this.toggleInfo}
+         contributionInfo={modalContribution}
         />
 
         <Table

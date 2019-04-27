@@ -63,7 +63,7 @@ class modalAddUpdate extends Component {
           type: "password",
           placeholder: "Enter user password"
         },
-        validation: {},
+        validation: {password: true},
         valid: false,
         touched: false,
         validationMessage: ""

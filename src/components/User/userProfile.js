@@ -10,6 +10,7 @@ import {
 	populateFields
 } from "../utils/Form/formAction";
 import Dropzone from "react-dropzone";
+import { toast } from 'react-toastify';
 
 class userProfile extends Component {
 	state = {
@@ -65,22 +66,6 @@ class userProfile extends Component {
 				valid: false,
 				touched: false,
 				validationMessage: ''
-			},
-			facultiesId: {
-				element: 'input',
-				value: '',
-				config: {
-					className: 'form-control',
-					name: 'faculitiesId_input',
-					disabled: true,
-					type: 'text'
-				},
-				validation: {
-					required: true
-				},
-				valid: false,
-				touched: false,
-				validationMessage: ''
 			}
 		}
 	};
@@ -92,7 +77,7 @@ class userProfile extends Component {
 		});
 	}
 	handleSubmit = (userId, fullName, phoneNumber, avatar) => {
-		this.props.dispatch(postUserProfile(userId, fullName, phoneNumber, avatar)).then(res => console.log(res));
+		this.props.dispatch(postUserProfile(userId, fullName, phoneNumber, avatar)).then(toast.success("Update Profile Successfully!!!"));
 	}
 	submitForm = e => {
 		e.preventDefault();
@@ -159,12 +144,6 @@ class userProfile extends Component {
 								<FormField
 									id="phoneNumber"
 									formdata={this.state.formData.phoneNumber}
-									change={(e) => this.updateForm(e)}
-								/>
-								<label style={styleLabel}>Faculties:</label>
-								<FormField
-									id="facultiesId"
-									formdata={this.state.formData.facultiesId}
 									change={(e) => this.updateForm(e)}
 								/>
 								<div className="row justify-content-around">

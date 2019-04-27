@@ -5,6 +5,7 @@ import Table from "../utils/table/table";
 import { getTermData, deleteTerm, postTerm } from "../../actions/term_actions";
 import ModalAddUpdate from "./modalAddUpdate";
 import Pagination from "../utils/pagination";
+import _ from "lodash";
 import { toast } from "react-toastify";
 
 class ManageTerm extends Component {
@@ -14,7 +15,8 @@ class ManageTerm extends Component {
     searchQuery: "",
     modalShow: false,
     modalTerm: "",
-    disableAdd: false
+    disableAdd: false,
+    sortColumn: { path: "name", order: "asc" }
   };
 
   columns = [
@@ -37,6 +39,7 @@ class ManageTerm extends Component {
           <button
             onClick={() => this.showUpdateForm(term)}
             className="btn btn-primary btn-sm"
+            disabled={this.handleDisabled(term)}
           >
             <i className="fa fa-pen" />
           </button>
@@ -50,6 +53,17 @@ class ManageTerm extends Component {
       )
     }
   ];
+
+  handleSort = sortColumn => {
+    this.setState({ sortColumn });
+  };
+
+  handleDisabled(term){
+    var d1 = new Date(term.closingDate);
+    var d2 = new Date();
+    return d2 > d1 ? true : false
+  }
+
   handleDelete = term => {
     var result = window.confirm("Do you want delete this term?");
     if (result) {
@@ -103,14 +117,15 @@ class ManageTerm extends Component {
   };
 
   getData = () => {
-    const { pageSize, currentPage, searchQuery } = this.state;
+    const { pageSize, currentPage, searchQuery, sortColumn } = this.state;
     let filtered = this.props.term.data;
     if (searchQuery) {
       filtered = this.props.term.data.filter(m =>
-        m.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+        m.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-    const dataPagination = paginate(filtered, currentPage, pageSize);
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+    const dataPagination = paginate(sorted, currentPage, pageSize);
     return { data: dataPagination, itemsCount: filtered.length };
   };
 
@@ -127,7 +142,7 @@ class ManageTerm extends Component {
   };
 
   render() {
-    const { pageSize, currentPage, modalTerm, modalShow } = this.state;
+    const { pageSize, currentPage, modalTerm, modalShow,sortColumn } = this.state;
     const { data: dataPagination, itemsCount } = this.getData();
     return (
       <div style={{ marginLeft: "50px" }}>
@@ -160,7 +175,8 @@ class ManageTerm extends Component {
           termInfo={modalTerm}
           onSubmit={this.handleSubmit}
         />
-        <Table data={dataPagination} columns={this.columns} />
+        <Table data={dataPagination} columns={this.columns}  sortColumn={sortColumn}
+          onSort={this.handleSort}/>
         <Pagination
           itemsCount={itemsCount}
           pageSize={pageSize}

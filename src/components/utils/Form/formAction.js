@@ -6,6 +6,15 @@ export const validate = (element, formdata = []) => {
     error = !valid ? [valid, message] : error;
   }
 
+  if(element.validation.password){
+    let valid = true;
+    if(element.value.length < 4 || element.value.length > 25){
+      valid = false;
+    }
+    const message = `${!valid ? "Passwords must be from 5 to 25 chars" : ""}`;
+    error = !valid ? [valid, message] : error;
+  }
+
   if (element.validation.confirm) {
     const valid =
       element.value.trim() === formdata[element.validation.confirm].value;

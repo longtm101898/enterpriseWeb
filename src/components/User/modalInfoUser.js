@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody } from "reactstrap";
 import { connect } from "react-redux";
-import { getRoleData } from "../../actions/role_actions";
-import { getFacultiesData } from "../../actions/faculties_actions";
 import {
     resetFields,
 } from "../utils/Form/formAction";
@@ -30,27 +28,22 @@ class modalInfoUser extends Component {
                 }
             }
             const { fullName, email, phoneNumber, avatar, status } = nextProps.userInfo;
-            this.setState({ status: status === 0 ? "InActive" : "Active" });
-
-            this.setState({ fullName, email, phoneNumber, avatar })
-            this.setState({ role: nextProps.userInfo.roles[0] });
+            this.setState({
+                fullName,
+                email,
+                phoneNumber,
+                avatar,
+                status: status === 0 ? "InActive" : "Active",
+                role: nextProps.userInfo.roles[0]
+            });
         } else {
             var userRs = resetFields(this.state.formData);
             this.setState({ formData: userRs, userId: 0 });
         }
     }
-    async componentDidMount() {
-        await this.props.dispatch(getRoleData());
-        await this.props.dispatch(getFacultiesData());
-
-        this.setState({
-            modal: this.props.show,
-        });
-
-    }
     render() {
         const styleLabel = { fontWeight: "bold" };
-        const { fullName, email, phoneNumber, avatar, faculties, role, status} = this.state;
+        const { fullName, email, phoneNumber, avatar, faculties, role, status } = this.state;
         return (
             <div>
                 <Modal isOpen={this.props.show} toggle={this.props.toggle}>

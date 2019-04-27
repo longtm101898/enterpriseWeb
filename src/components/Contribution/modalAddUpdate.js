@@ -69,11 +69,13 @@ class ModelAddUpdate extends Component {
 
       this.setState({
         formData: conForm,
-        conId: nextProps.contributionInfo.id
+        conId: nextProps.contributionInfo.id,
+        img:  nextProps.contributionInfo.imageURL,
+        word:  nextProps.contributionInfo.fileURL
       });
     } else {
       var conRs = resetFields(this.state.formData);
-      this.setState({ formData: conRs, conId: 0 });
+      this.setState({ formData: conRs, conId: 0, word: "", img: "" });
     }
   }
 
@@ -95,15 +97,17 @@ class ModelAddUpdate extends Component {
     e.preventDefault();
     const { img, word } = this.state;
     let dataToSubmit = generateData(this.state.formData, "con");
+    dataToSubmit.title = dataToSubmit.title.trim()
     let formIsValid = isFormValid(this.state.formData, "con");
-    if (formIsValid) {
-      if (this.state.conId !== 0) {
+    if (formIsValid && img !== "" && word !== "") {
+      this.props.toggle();
+      if (this.state.conId !== 0 ) {     
         this.props.onSubmit(dataToSubmit, this.state.conId, img, word);
       } else {
         this.props.onSubmit(dataToSubmit, 0, img, word);
       }
-      this.props.toggle();
-      this.setState({ disableButton: false });
+      
+      this.setState({ disableButton: true });
     } else {
       toast.error("Form is invalid!!!");
       this.setState({
@@ -160,7 +164,7 @@ class ModelAddUpdate extends Component {
       cursor: "pointer",
       padding: "54px 54px"
     };
-    const { disableButton } = this.state;
+    const { disableButton, word, img} = this.state;
     const styleLabel = { fontWeight: "bold" };
     return (
       <div style={{ margin: "0 auto" }}>
@@ -192,7 +196,7 @@ class ModelAddUpdate extends Component {
                     >
                       <input {...getInputProps()} />
                       <p>
-                        {acceptedFiles.length !== 0
+                        {(acceptedFiles.length !== 0 || word !== "")
                           ? ""
                           : "Drag 'n' drop some files here, or click to select files"}
                       </p>
@@ -203,6 +207,11 @@ class ModelAddUpdate extends Component {
                               <i className="far fa-file-word" /> {file.path}
                             </li>
                           ))}
+                          {(img !== "" && acceptedFiles.length == 0)&&
+                        <li>
+                        <i className="far fa-file-word" /> {word}
+                      </li>
+                        }
                       </ul>
                     </div>
                   </section>
@@ -215,7 +224,7 @@ class ModelAddUpdate extends Component {
                     <div {...getRootProps()} style={dropzoneStyled}>
                       <input {...getInputProps()} />
                       <p>
-                        {acceptedFiles.length !== 0
+                      {(acceptedFiles.length !== 0 || img !== "")
                           ? ""
                           : "Drag 'n' drop some files here, or click to select files"}
                       </p>
@@ -229,12 +238,26 @@ class ModelAddUpdate extends Component {
                               <img
                                 width="auto"
                                 height="100%"
-                                src={"http://localhost:49763/" + this.state.img}
+                                src={"http://localhost:49763/" + img}
                                 alt="img"
                                 key={file.name}
                               />
                             </div>
                           ))}
+                          {
+                            (img !== "" && acceptedFiles.length == 0)&&
+                            <div
+                              style={{ width: 100, height: 100 }}
+                            >
+                              <img
+                                width="auto"
+                                height="100%"
+                                src={"http://localhost:49763/" + img}
+                                alt="img"
+                                key={img}
+                              />
+                            </div>
+                          }
                       </ul>
                     </div>
                   </section>

@@ -9,12 +9,14 @@ import {
 } from "../utils/Form/formAction";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { toast } from "react-toastify";
+import { getFormattedDate } from "../../shared/utility";
 
 class ModelAddUpdate extends Component {
   state = {
     modal: false,
     formError: false,
     formSuccess: "",
+    dateClosing: "",
     formData: {
       name: {
         element: "input",
@@ -53,7 +55,7 @@ class ModelAddUpdate extends Component {
     if (nextProps.termInfo !== "") {
       var termForm = populateFields(this.state.formData, nextProps.termInfo);
 
-      this.setState({ formData: termForm, termId: nextProps.termInfo.id });
+      this.setState({ formData: termForm, termId: nextProps.termInfo.id, closingDate: nextProps.termInfo.closingDate });
     } else {
       var termRs = resetFields(this.state.formData);
       this.setState({ formData: termRs, termId: 0 });
@@ -68,9 +70,13 @@ class ModelAddUpdate extends Component {
 
   updateForm = element => {
     const newFormdata = update(element, this.state.formData, "term");
+    let dataToSubmit = generateData(newFormdata, "term");
+    var d1 = new Date(dataToSubmit.dateStarted);
+    d1.setDate(d1.getDate() + 60)
     this.setState({
       formError: false,
-      formData: newFormdata
+      formData: newFormdata,
+      closingDate: d1
     });
   };
 
@@ -93,8 +99,13 @@ class ModelAddUpdate extends Component {
       });
     }
   };
+  handleClosingDate(date){
+
+    return getFormattedDate(date);
+  }
   render() {
     const styleLabel = { fontWeight: "bold" };
+    const closingDate = new Date(this.state.closingDate);
     return (
       <div style={{ margin: "0 auto" }}>
         <Modal isOpen={this.props.show} toggle={this.props.toggle}>
@@ -119,6 +130,8 @@ class ModelAddUpdate extends Component {
                 formdata={this.state.formData.dateStarted}
                 change={e => this.updateForm(e)}
               />
+                 <label style={styleLabel}>Date Closing:</label>
+              {this.handleClosingDate(closingDate)}
             </form>
           </ModalBody>
           <ModalFooter>

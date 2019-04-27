@@ -99,8 +99,9 @@ class ModalExcelImport extends Component {
         )
         .then(res => {
           toast.success(res.data);
-          this.props.dispatch(getUserData());
+          this.props.onSubmit();
         });
+        this.props.toggle();
     } else {
       toast.error("Form is invalid");
       this.setState({

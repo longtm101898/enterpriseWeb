@@ -5,6 +5,7 @@ import Table from "../utils/table/table";
 import { getFacultiesData, deleteFaculties, postFaculties } from "../../actions/faculties_actions";
 import ModalAddUpdate from "./modalAddUpdate";
 import Pagination from "../utils/pagination";
+import _ from "lodash";
 
 class ManageFaculties extends Component {
   state = {
@@ -12,7 +13,8 @@ class ManageFaculties extends Component {
     currentPage: 1,
     searchQuery: "",
     modalShow: false,
-    modalFaculties: ""
+    modalFaculties: "",
+    sortColumn: { path: "name", order: "asc" }
   };
 
   columns = [
@@ -44,6 +46,10 @@ class ManageFaculties extends Component {
       )
     }
   ];
+
+  handleSort = sortColumn => {
+    this.setState({ sortColumn });
+  };
   handleDelete = fac => {
     var result = window.confirm("Do you want delete this faculties?");
     if(result){
@@ -75,15 +81,16 @@ class ManageFaculties extends Component {
   };
 
   getData = () => {
-    const { pageSize, currentPage, searchQuery } = this.state;
+    const { pageSize, currentPage, searchQuery,sortColumn } = this.state;
     let filtered = this.props.faculties.data;
     if (searchQuery) {
       filtered = this.props.faculties.data.filter(m =>
-        m.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+        m.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     const dataPagination = paginate(
-      filtered,
+      sorted,
       currentPage,
       pageSize
     );
@@ -108,7 +115,8 @@ class ManageFaculties extends Component {
       pageSize,
       currentPage,
       modalFaculties,
-      modalShow
+      modalShow,
+      sortColumn
     } = this.state;
     const { data: dataPagination, itemsCount  } = this.getData();
     return (
@@ -138,7 +146,8 @@ class ManageFaculties extends Component {
           onSubmit={this.handleSubmit}
         />
         
-        <Table data={dataPagination} columns={this.columns} />
+        <Table data={dataPagination} columns={this.columns} sortColumn={sortColumn}
+          onSort={this.handleSort}/>
         <Pagination
           itemsCount={itemsCount}
           pageSize={pageSize}

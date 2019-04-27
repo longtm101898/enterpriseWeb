@@ -15,44 +15,13 @@ class ModalComment extends Component {
   state = {
     formError: false,
     formSuccess: "",
-    formData: {
-      comment: {
-        element: "textarea",
-        value: "",
-        config: {
-          className: "form-control",
-          name: "comment_input",
-          type: "text",
-          placeholder: "Enter Contribution Comment"
-        },
-        validation: {},
-        valid: false,
-        touched: false,
-        validationMessage: ""
-      },
-      status: {
-        element: "select",
-        value: "",
-        config: {
-          className: "form-control form-control-user",
-          name: "facultiesId_input",
-          options: [
-            { key: 0, value: "Waiting" },
-            { key: 1, value: "Cancelled" },
-            { key: 2, value: "published" }
-          ]
-        },
-        validation: {},
-        valid: false,
-        touched: false,
-        validationMessage: ""
-      }
-    },
     title: "",
     description: "",
     fileURL: "",
     imageURL: "",
-    dateCreated: ""
+    dateCreated: "",
+    status:"",
+    comment:""
   };
   componentWillReceiveProps(nextProps) {
     if (nextProps.contributionInfo !== "") {
@@ -61,7 +30,11 @@ class ModalComment extends Component {
         nextProps.contributionInfo
       );
       const dateCreated = getFormattedDate(new Date(nextProps.contributionInfo.dateCreated));
-      const {title,description,fileURL,imageURL} = nextProps.contributionInfo;
+      const {title,description,fileURL,imageURL,comment} = nextProps.contributionInfo;
+      var {status} = nextProps.contributionInfo;
+      if (status == 0) status = "Waiting"
+      else if (status == 1) status = "Cancelled"
+      else if (status == 2) status = "Published"
       this.setState({
         formData: conForm,
         conId: nextProps.contributionInfo.id,
@@ -69,7 +42,9 @@ class ModalComment extends Component {
         description,
         fileURL,
         imageURL,
-        dateCreated
+        dateCreated,
+        comment,
+        status
       });
     } else {
       var conRs = resetFields(this.state.formData);
@@ -83,40 +58,13 @@ class ModalComment extends Component {
     });
   }
 
-  updateForm = element => {
-    const newFormdata = update(element, this.state.formData, "con");
-    this.setState({
-      formError: false,
-      formData: newFormdata
-    });
-  };
-
-  submitForm = e => {
-    e.preventDefault();
-    let dataToSubmit = generateData(this.state.formData, "con");
-    let formIsValid = isFormValid(this.state.formData, "con");
-    if (formIsValid) {
-      this.props.onSubmit(
-        this.state.conId,
-        dataToSubmit.comment,
-        dataToSubmit.status
-      );
-      this.props.toggle();
-    } else {
-      toast.error("Form is invalid!!!")
-      this.setState({
-        formError: true
-      });
-    }
-  };
-
   render() {
-    const { title, description, fileURL, imageURL, dateCreated } = this.state;
+    const { title, description, fileURL, imageURL, dateCreated, status, comment} = this.state;
     const styleLabel = { fontWeight: "bold" };
     return (
       <div style={{ margin: "0 auto" }}>
         <Modal isOpen={this.props.show} className="modal-lg">
-          <ModalHeader>Student Comment Form</ModalHeader>
+          <ModalHeader>Student Info Form</ModalHeader>
           <ModalBody>
             <form onSubmit={e => this.submitForm(e)}>
               <label style={styleLabel}>Title: </label>
@@ -137,23 +85,12 @@ class ModalComment extends Component {
               <label style={styleLabel}>Date Created:</label>
               <p>{dateCreated}</p>
               <label style={styleLabel}>Comment: </label>
-              <FormField
-                id="comment"
-                formdata={this.state.formData.comment}
-                change={e => this.updateForm(e)}
-              />
+              <p>{comment}</p>
               <label style={styleLabel}>Status:</label>
-              <FormField
-                id="status"
-                formdata={this.state.formData.status}
-                change={e => this.updateForm(e)}
-              />
+              <p>{status}</p>
             </form>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={e => this.submitForm(e)}>
-              Submit
-            </Button>
             <Button color="danger" onClick={this.props.toggle}>
               Cancel
             </Button>
